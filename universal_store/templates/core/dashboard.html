@@ -1,0 +1,434 @@
+
+
+{% extends 'partials/base.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block title %}
+ Setting 
+{% endblock %}
+{% block 'content' %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="{% static 'assets/css/main2.css' %}" />
+<main class="main pages">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="{% url 'Home'  %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                <span></span> My Account
+            </div>
+        </div>
+    </div>
+    <div class="page-content pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="dashboard-menu">
+                                <ul class="nav flex-column" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Profile</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'sign-out'  %}"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="tab-content account dashboard-content pl-50">
+                                <div class="tab-pane fade active show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="mb-0 border-bottom">My Profile</h3>
+                                        </div>
+                                        <div class="card-body mb-2 row" style="display: flex; align-items: center;gap: 10px;">
+                                                    <div class="product-cart-wrap col-lg-4" style="width: fit-content;border-radius: 50%;padding:0px;margin-bottom: 290px;">
+                                                        <div class="product-img-action-wrap" style="padding:0px;">
+                                                            <img id="preview" src="{{profile.image.url}}" width="200" height="200" alt="Image sélectionnée" style="">
+                                                            <!-- <div class="product-action-1">
+                                                                <a aria-label="view the image" class="action-btn" href=""><i class="fi-rs-eye"></i></a>
+                                                                <a aria-label="change the image" class="action-btn" href=""><i class="fi-rs-pencil"></i></a>
+                                                                <a aria-label="delete the image" class="action-btn" href=""><i class="fi-rs-trash"></i></a>
+                                                            </div> -->
+                                                        </div>
+                                                    </div>
+
+                                            <div class=" col-lg-8">
+                                                <span><h2 class="mb-2">{{profile.user.username}}</h2></span>
+                                                <span><h6 class="mb-15"> {{profile.first_name}}  {{profile.last_name}}</h6></span>
+                                                <span>Infos <h6 style="font-weight: 100;" class="mb-15"> {{profile.bio}}</h6></span>
+                                                {% if profile.user.phone %}
+                                                <span >Numéro de telephone <h6 class="mb-50" style="font-weight: 100;" style="margin-bottom: 50px;">{{profile.user.phone}}</h6></span>
+                                                {% endif %}
+                                                <span>
+                                                    <div class="col-md-12">
+                                                        <ul class="nav flex-column" role="tablist">
+                                                            <a id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><button type="submit" class="btn btn-fill-out submit font-weight-bold" name="submit" value="Submit">Change Profile</button></a>
+                                                        </ul>
+                                                </div>
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <canvas id="myChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                        <div class="card-heder">
+                                            <h3 class="mb-0">Your Orders</h3>
+                                        </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped invoice-table" style="font-size: larger;">
+                                            <thead class="bg-active">
+                                                <tr>
+                                                    <th>Order</th>
+                                                    <th>Date</th>
+                                                    <th>Paid</th>
+                                                    <th>Total</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for order in orders_list %}
+                                                <tr>
+                                                    <td>#INVOICE_NO-{{order.id}}</td>
+                                                    <td>{{order.order_date}}</td>
+                                                    {% if order.paid_status == False %}
+                                                    <td><!-- <i class="fi-rs-Xmark"></i> --><center>X</center></td>
+                                                    {% else  %}
+                                                    <td><i class="fi-rs-check"></i></td>
+                                                    {% endif %}
+                                                    <td>{{order.price}}</td>
+                                                    <td><a href="{% url 'order-detail' order.id  %}" class="btn-small d-block">Order detail</a></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="mb-0">Orders tracking</h3>
+                                        </div>
+                                        <div class="card-body contact-from-area">
+                                            <p>To track your order please enter your OrderID in the box below and press "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <form class="contact-form-style mt-30 mb-50" action="#" method="post">
+                                                        <div class="input-style mb-20">
+                                                            <label>Order ID</label>
+                                                            <input name="order-id" placeholder="Found in your order confirmation email" type="text">
+                                                        </div>
+                                                        <div class="input-style mb-20">
+                                                            <label>Billing email</label>
+                                                            <input name="billing-email" placeholder="Email you used during checkout" type="email">
+                                                        </div>
+                                                        <button class="submit submit-auto-width" type="submit">Track</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                    <div class="row">
+{% if address %}
+{% for address in address %}
+
+<div class="col-lg-6">
+    <div class="card mb-3 mb-lg-0">
+        <div class="card-header">
+            <h3 class="mb-0">Billing Address {{forloop.counter}} </h3>
+        </div>
+        <div class="card-body border rounded">
+            <address>Country : {{address.country}}</address>
+            <address>Regions : {{address.region}}</address>
+            <address>City : {{address.city}}</address>
+            <address>Address line 1 : {{address.address_line_1}}</address>
+            {% if address.address_line_2 %}
+            <address>Address line 2 : {{address.address_line_2}}</address>
+            {% endif %}
+            {% if address.mobile %}
+            <address>Numero de telephone :{{address.mobile}}</address>
+            {% endif %}
+            <hr style="margin-bottom:10px; color: rgba(240, 255, 255, 0);">
+            <!-- {% if address.status %}
+            <td>Status : <span style="color: green;" data-address-id="{{address.id}}" class="check{{address.id}} check" > Default </span> </td>
+            <div class="row mt-10">
+                <div class="col">
+            <button data-address-id="{{address.id}}" style="display: none;" class="btn  make-default-address button{{address.id}} action_btn font-weight-old">Make default</button>
+                </div>
+            </div>
+            {% else  %}
+            <td>Status : <span style="color: green; " style="display: none;"   data-address-id="{{address.id}}" class="check{{address.id}} check" > approuved </span> </td>
+            <div class="row mt-10">
+                <div class="col">
+            <button data-address-id="{{address.id}}"  class="btn make-default-address button{{address.id}} action_btn font-weight-old">Make default</button>
+
+                </div>
+            </div>
+            {% endif %} -->
+
+            {% if address.status %}
+            <td class="mt-10 text-end">Status : <span data-address-id="{{address.id}}" class="fa fa-check-circle text-success check{{address.id}} check"><span>  Default </span></span></td>
+            <td class="mt-10 text-end">
+                <button data-address-id="{{address.id}}" style="display: none;" class="btn make-default-address  button{{address.id}} action_btn">Make Default</button>
+            </td>
+            {% else  %}
+            <td class="mt-10 text-end">
+            <span data-address-id="{{address.id}}" style="display: none;" class="fa fa-check-circle text-success check check{{address.id}}"> Default </span> 
+            </td>
+            <td class="mt-10 text-end">
+            <button data-address-id="{{address.id}}"  class="btn make-default-address  button{{address.id}} action_btn">Make Default</button>
+            </td>
+            {% endif %}
+
+        </div>
+    </div>
+</div> 
+{% endfor %}
+{% else  %}
+    <h1>any addres found</h1>
+{% endif %}
+<div class="card">
+    <div class="card-header">
+        <h5>Add new address</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                        
+                <div class="form-group col-md-6">
+                    <label>Country<span class="required">*</span></label>
+                    <input required="" class="form-control" name="country" type="text">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Regions<span class="required">*</span></label>
+                    <input required="" class="form-control" name="regions" type="text">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>City<span class="required">*</span></label>
+                    <input required="" class="form-control" name="city" type="text">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Address line 1<span class="required">*</span></label>
+                    <input required="" class="form-control" name="address_line_1" type="text">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Address line 2</label>
+                    <input class="form-control" name="address_line_2" type="text">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Phone<span class="required">*</span></label>
+                    <input required="" class="form-control" name="mobile">
+                </div>
+                <div class="col-md-12 mt-20 form-group">
+                    <button class="btn" name="submit" value="Submit">Save</button>
+                </div>
+        
+                        </div>
+        </form>
+    </div>
+</div>
+    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Account Details</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form  method="post"  action="{% url 'change-profile'%}" id="uploadForm" enctype="multipart/form-data">
+                                                {% csrf_token %}
+
+                                                <div class="row">
+                                                    <div class="product-cart-wrap mb-30" style="width: fit-content;border-radius: 50%;padding:0px;">
+                                                        <div class="product-img-action-wrap" style="padding:0px;">
+                                                            <img id="preview" src="{{profile.image.url}}" width="200" height="200" alt="Image sélectionnée" style="">
+                                                            <!-- <div class="product-action-1">
+                                                                <a aria-label="view the image" class="action-btn" href=""><i class="fi-rs-eye"></i></a>
+                                                                <a aria-label="change the image" class="action-btn" href=""><i class="fi-rs-pencil"></i></a>
+                                                                <a aria-label="delete the image" class="action-btn" href=""><i class="fi-rs-trash"></i></a>
+                                                            </div> -->
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label><span class="required"></span></label>
+                                                        <input required="" class="form-control" style="text-align: center;" disabled value="Profile du compte" name="dname" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>First Name <span class="required">*</span></label>
+                                                        <input required="" class="form-control" value="{{profile.first_name}}" name="first_name" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Last Name <span class="required">*</span></label>
+                                                        <input required="" class="form-control" value="{{profile.last_name}}" name="last_name" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>username <span class="required">*</span></label>
+                                                        <input required="" class="form-control" value="{{profile.user.username}}" name="username" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6"  style="padding: 0;height: max-content;">
+                                                        <label>image<span class="required">*</span></label>
+                                                        <input type="file" name="image" class="form-control pt-15">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <!-- <label>Info<span class="required">*</span></label> -->
+                                                        <!-- <input required="" class="form-control"  name="email" type="email"> -->
+                                                        <textarea name="bio" cols="30" rows="10">{{profile.bio}}</textarea>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="btn btn-fill-out submit font-weight-bold" name="submit" value="Submit">Save Change</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <form  method="post" action="{% url 'change-password'  %}">  
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label><span class="required"></span></label>
+                                                        <input required="" class="form-control" style="text-align: center;" disabled  value="change password" name="info" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Current Password <span class="required">*</span></label>
+                                                        <input required="" class="form-control" name="current_password" type="password">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <!-- <label>Current Password <span class="required">*</span></label> -->
+                                                        <input required="" class="form-control" name="password" type="hidden">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>New Password <span class="required">*</span></label>
+                                                        <input required="" class="form-control" name="new_password" type="password">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Confirm Password <span class="required">*</span></label>
+                                                        <input required="" class="form-control" name="confirm_password" type="password">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="btn btn-fill-out submit font-weight-bold" name="submit" value="Submit">Save Change</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <form  method="post" action="#">  
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label><span class="required"></span></label>
+                                                        <input required="" class="form-control" style="text-align: center;" disabled  value="change e-mail" name="info" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Email Address <span class="required">*</span></label>
+                                                        <input required="" class="form-control" value="{{profile.user.email}}" name="email" type="email">
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="btn btn-fill-out submit font-weight-bold" name="submit" value="Submit">change email</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <form  method="post" action="#">>  
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label><span class="required"></span></label>
+                                                        <input required="" class="form-control" style="text-align: center;" disabled  value="change phonenumber" name="info" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Current Password <span class="required">*</span></label>
+                                                        <input required="" class="form-control" value="{{profile.user.phone}}" name="phone">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="btn btn-fill-out submit font-weight-bold" name="submit" value="Submit">Save Change</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Sample data for the bar chart
+    var data = {
+      labels: {{ month|safe }},
+      datasets: [{
+        label: 'orders',
+        data: {{ total_orders|safe }},
+        backgroundColor: 'hsl(234.17deg 42.09% 25.49%)',
+        borderColor: 'hsl(234.17deg 42.09% 25.49%)',
+        borderWidth: 1
+      }]
+    };
+
+    // Chart configuration
+    var options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    };
+
+    // Get the canvas element
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    // Create the bar chart
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+      options: options
+    });
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

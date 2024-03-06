@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<div id="element-a">Ceci est un élément à dupliquer</div>
+<button onclick="dupliquerElement()">Dupliquer</button>
+<div id="conteneur-elements"></div>
+
+function dupliquerElement() {
+    // Sélectionnez l'élément que vous souhaitez dupliquer
+    var elementA = document.getElementById("element-a");
+
+    // Créez une copie de l'élément
+    var cloneElement = elementA.cloneNode(true);
+
+    // Ajoutez la copie à un conteneur dans le DOM
+    var conteneurElements = document.getElementById("conteneur-elements");
+    conteneurElements.appendChild(cloneElement);
+}
+</body>
+</html>

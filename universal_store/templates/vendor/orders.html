@@ -1,0 +1,101 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Order List</h2>
+            <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <input type="text" placeholder="Search..." class="form-control" />
+                    <a href="" type="submit" style="position: absolute; top: 24px;left: 460px;">
+                            <i class="fi-rs-search" style="font-weight: 700;font-size: 22px;"></i>
+                       </a>
+                </div>
+            </div>
+        </header>
+        <!-- card-header end// -->
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Order ID</th>
+                            <th class="text-center" scope="col">Billing Name</th>
+                            <th class="text-center" scope="col">Date</th>
+                            <th class="text-center" scope="col">product Image</th>
+                            <th scope="col" class="text-center">product title</th>
+                            <th scope="col" class="text-center">qty</th>
+                            <th scope="col" class="text-center">price</th>
+                            <th scope="col" class="text-center">Total</th>
+                            <th scope="col" class="text-center">Delievry Status</th>
+                            <th scope="col" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for order in orders %}
+                      <tr>
+                        <form action="{% url 'update-orders' order.cpid %}" method="post">
+{% csrf_token %}
+                        <td class="text-center">{{order.invoice_no}}
+                            <input type="hidden" value="{{order.cpid}} " name="cpid">
+                        </td>
+                        <td class="text-center">{{order.order.user}} <br> {{order.order.user.phone}} </td>
+                        
+                        <td class="text-center">  {{ order.order.order_date|date:'d/M/Y' }}<br>
+                            {{ order.order.order_date|time}}</td>
+                        <td><center><a href="{{order.image}}"><img src="{{order.image}}" width="50" height="50" alt=""></a></center></td>
+                        <td class="text-center"><b>{{order.item}} </b></td>
+                        <td class="text-center">{{order.qty}}</td>
+                        <td class="text-center" >{{order.price}}  </td>
+                        <td class="text-center"> {{order.total }}  </td>
+                        <td class="text-center">
+                        <span class="alert-warning">
+                                <select class="form-select" style="width:fit-content;" name="status" onchange="submit()">
+                                    <option value="processing" {% if order.product_status == 'processing' %}selected{% endif %}>Processing</option>
+                                    <option value="shipped" {% if order.product_status == 'shipped' %}selected{% endif %}>Shipped</option>
+                                    <option value="delivered" {% if order.product_status == 'delivered' %}selected{% endif %}>Delivered</option>
+                                </select>
+                                <noscript>
+                                    <input type="submit" value="submit" name="submit">
+                                </noscript>
+                        </span>
+                        </td>
+                    </form>
+
+                        <td class="text-center">
+                            <form action="{% url 'delete-orders' order.cpid   %}" method="post">
+                                {% csrf_token %}
+                            <!-- <button href=""  class="col" name="submit"  class="btn btn-sm btn-light font-sm rounded" style="color: black; border:none ; padding:5px;"><i class="material-icons fi-rs-save"></i>Save</button> -->
+                             <button href=""  class="col" name="submit" value="Submit"  onclick="return confirm('Are you sure you want to delete this Product ?')" class="btn btn-sm btn-light font-sm rounded" style="color: black; border:none ; padding:5px;"><i class="material-icons fi-rs-trash md-delete_forever"></i></button>
+                             <!-- <button class="btn p-2 "   name="submit"><i class="material-icons fi-rs-save">save</i></button>
+                                <button class="p-2 btn" style="background-color: red;" name="submit" ><i class="material-icons fi-rs-trash md-delete_forever"></i></button> -->
+                            </form>
+                            </td>
+                    </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- table-responsive //end -->
+        </div>
+        <!-- card-body end// -->
+    </div>
+    <!-- card end// -->
+</section>
+{% endblock %}

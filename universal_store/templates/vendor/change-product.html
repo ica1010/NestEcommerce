@@ -1,0 +1,274 @@
+{% extends 'partials/vbase.html' %}
+{% load static %}
+{% load i18n %}
+{% load currency %}
+
+{% block 'vendor' %}
+<section class="content-main">
+    <form action="{% url 'change-product' product.pid  %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Update {{product.title}} </h2>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <section class="popular-categories section-padding card p-0">
+                    <div class="container wow fadeIn animated" style="padding: 0px 0px !important;">
+                        <div class="section-title card-header">
+                            <div class="title">
+                                <h3>Product image </h3>
+                            </div>
+                            <div class="slider-arrow slider-arrow-2 flex-right carausel-8-columns-arrow" id="carausel-8-columns-arrows"></div>
+                        </div>
+                        <div class="carausel-8-columns-cover position-relative card-body">
+                            <div class="carausel-8-columns" id="carausel-8-columns">
+                                {% for image in product_image %}
+                                <div  style="width: fit-content;">
+                                    <form method="post" action="{% url 'edit_product_image' product.pid  image.id %}"
+                                        enctype="multipart/form-data"  style="width: fit-content;">
+                                     <center>
+
+                                        {% csrf_token %}
+                                        <div class="" id="images-list" style="width: fit-content;">
+                                            <center>
+                                                <img src="{{ image.images.url }}" alt="Image" style="border-radius: 8px;margin: 10px; width: 80%;height: 100px;">
+                                            </center>
+                                            <input id="imageUpload2" type="file" name="new_image" class="form-control"
+                                             onchange='submit()'>
+                                        </div>
+                                        <noscript>
+                                            <button class="btn btn-sm btn-light font-sm rounded submit" type="submit"><i
+                                                class="material-icons fi-rs-edit"></i></button>
+                                        </noscript>
+                                        <a class="btn btn-sm btn-light font-sm rounded"><i
+                                            class="material-icons fi-rs-edit" onclick="uploadImage2= ()=>{document.getElementById('imageUpload2').click()}"></i></a>
+                                    
+                                    <a href="{% url 'delete_product_image' image.id %}"
+                                        class="delete-image btn btn-sm btn-light font-sm rounded"
+                                        data-image-id="{{ image.id }}"><i
+                                        class="material-icons fi-rs-trash"></i></a>
+                                     </center>
+                                    </form>
+                                </div>
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4>Principal image<span class="required">*</span></h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <div id="preview-container" style="display: flex;flex-wrap: wrap; justify-content: center; align-items: center;">
+                                        <ul id="fileList"></ul>
+                                    </div>
+                                    <input type="file" name="images" multiple id="imageUpload" style="display: none;" class="form-control"
+                                       onchange="previewImage(this)">
+                                </div>
+                            </div>
+                        </div>
+                     <!-- <button onclick="clearFiles()">Clear Files</button> -->
+                       
+                           <center> <a id="scrollUp" class="btn btn-primary mb-5" onclick="uploadImage()"><i class="fa fa-cloud-upload" style="color: blue;"></i>Upload image</span></a></center>
+                        <!-- card end// -->
+                    </div>
+                </section>
+
+   
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic information</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Product title<span class="required">*</span></label>
+                            <input type="text" placeholder="" required value="{{product.title}}" name="product_title"
+                                class="form-control" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description</label>
+                            <textarea placeholder="Type here" class="form-control tinymce-editor" name="product_desc"
+                                rows="4">{{product.description|safe}}</textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full specification</label>
+                            <textarea placeholder="Type here" class="form-control tinymce-editor" name="product_spec"
+                                rows="4">{{product.specification|safe}}</textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Regular price</label>
+                                    <div class="row gx-2">
+                                        <input
+                                            type=""
+                                            placeholder="{{product.old_price|currency:request.session.currency}}"
+                                            name="product_old_price" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Promotional price</label>
+                                    <input
+                                        type="" name="product_price"
+                                        placeholder="{{product.price|currency:request.session.currency}}"
+                                        class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Currency</label>
+                                <input value="{{request.session.currency}}" class="form-control" disabled
+                                    style="background-color: white;border: 0px white;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+
+
+                <!-- <button type="submit">save</button> -->
+
+
+
+                <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>References</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-sm-12 mb-3">
+                                <label class="form-label">Category</label>
+                                <div class="custom_select col-sm-12">
+                                    <select class="form-select select-nice" name="category">
+                                        <option selected value="{{product.category}}">{{product.category}}</option>
+                                        {% for category in categories %}
+                                        <option value="{{category.title}}">{{category.title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-4">
+                                <label class="form-label">Product Type</label>
+                                <input type="text" class="form-control" name='type' value="{{product.type}}" />
+                            </div>
+                            <!-- <label for="">Product life</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <label  class="form-label">Created at</label>
+                                <input type="date" class="form-control px-2" name='from' value="{{product.from_d}}" />
+                            </div>
+                            <div class="col-6">
+                                <label  class="form-label">exprire at</label>
+                                <input type="date" class="form-control px-2" name='to' value="{{product.to_d}}"  />
+                            </div>
+                        </div> -->
+                        </div>
+                        <!-- row.// -->
+
+                    </div>
+
+                </div>
+                <!-- card end// -->
+                <div class="col-md-12">
+                    <button type="submit" class="bt form-control p-0 submit" name="submit" value="Submit">Save
+                        change</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</section>
+
+<script>
+    document.querySelectorAll('.delete-image').forEach(button => {
+        button.addEventListener('click', () => {
+            const imageId = button.getAttribute('data-image-id');
+
+            // Envoyez une demande AJAX au serveur pour supprimer l'image
+            fetch(`/delete-product-image/${imageId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCookie(
+                            'csrftoken'
+                        ) // Assurez-vous d'inclure le jeton CSRF dans les en-têtes
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.message); // Affichez un message de confirmation
+
+                    // Actualisez l'image si la suppression a réussi
+                    if (data.success) {
+                        const imageElement = document.querySelector(
+                            `img[data-image-id="${imageId}"]`);
+                        if (imageElement) {
+                            imageElement.src =
+                                'chemin_vers_nouvelle_image.jpg'; // Remplacez par le chemin de la nouvelle image
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    });
+
+    // Fonction pour obtenir le jeton CSRF depuis les cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+<script>
+    const imageUpload = document.getElementById('imageUpload');
+    const fileList = document.getElementById('fileList');
+    imageUpload.addEventListener('change', function () {
+        for (const file of this.files) {
+            const listItem = document.createElement('span');
+            listItem.innerHTML = `
+              
+                    <img src="${URL.createObjectURL(file)}" width="100" height="100" >
+                    <button onclick="removeFile(this)" class='delete-button' >X</button>
+               
+            `;
+            fileList.appendChild(listItem);
+        }
+    });
+
+    function removeFile(button) {
+        const listItem = button.closest('span');
+        listItem.remove();
+    }
+
+
+    // function clearFiles() {
+    //     imageUpload.value = ''; // Clear the selected files
+    //     fileList.innerHTML = ''; // Clear the list
+    // }
+</script>
+
+
+{% endblock %}

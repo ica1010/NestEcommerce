@@ -1,0 +1,95 @@
+{% extends 'partials/base.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block title %}
+ Wishlist
+{% endblock %}
+{% block 'content' %}
+<main class="main" id="wishlist-list">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                <span></span> Shop
+                <span></span> Fillter
+            </div>
+        </div>
+    </div>
+    <div class="container mb-30 mt-50">
+        <div class="row">
+            <div class="col-xl-10 col-lg-12 m-auto">
+                {% if wishlist %}
+                <div class="mb-50">
+                    <h1 class="heading-2 mb-10">Your Wishlist</h1>
+                    <h6 class="text-body">There are <span class="text-brand"> {{wishlist.count}} </span> product{{wishlist.count|pluralize}} in this list</h6>
+                </div>
+                <div class="table-responsive shopping-summery">
+                    <table class="table table-wishlist">
+                        <thead>
+                            <tr class="main-heading">
+                                <th scope="col" class="start pl-30">Image</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Stock Status</th>
+                                <th scope="col">Action</th>
+                                <th scope="col" class="end">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+
+                            {% for product in wishlist %}
+                            <tr class="pt-30">
+                                <td class="image product-thumbnail pt-40"><img src="{{product.product.image.url}}" alt="#"></td>
+                                <td class="product-des product-name">
+                                    <h6><a class="product-name mb-10" href="shop-product-right.html">{{product.product.title}}</a></h6>
+                                    <!-- <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width:90%">
+                                            </div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
+                                    </div> -->
+                                </td>
+                                <td class="price" data-title="Price">
+                                    <div class="product-price">
+                                        <span class="current-product-price-{{product.id}}">{{product.product.price}} </span>
+                                    </div>
+                                </td>
+                                <td class="text-center detail-info" data-title="Stock">
+                                    <span class="stock-status in-stock mb-0">
+                                        In Stock
+                                    </span>
+                                </td>
+                                <td class="text-right" data-title="Cart">
+                                     <div class="add-cart">
+                                        <span class="detail-qty">
+                                            <span style="display: none;"  data-index="{{product.id}}" class="qty-val">1</span>
+                                        </span>
+                                        <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{product.id}}" >
+                                        <input type="hidden"  class="product-pid-{{product.id}}" value="{{product.product.pid}} ">
+                                        <input type="hidden"  class="product-image-{{product.id}}" value="{{ product.product.image.url }}">
+                                        <input type="hidden"  class="product-id-{{product.id}}" value="{{ product.id }}">
+                                        <input type="hidden"  class="product-title-{{product.id}}" value="{{ product.product.title}}">
+                                        <a class="add add-to-cart-btn b-0" data-index="{{product.id}}" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                      </div>
+                                </td>
+                                <td class="action text-center" data-title="Remove"><a data-wishlist-product="{{product.id}}" class="text-body delete-wishlist-product"><i class="fi-rs-trash"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                                    <div class="card-body" style="height:500px;">
+                                        <h2 class="text-center">Any product found !</h2>
+                                    </div>
+                                
+                            {% endif %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

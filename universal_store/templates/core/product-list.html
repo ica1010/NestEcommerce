@@ -1,0 +1,465 @@
+{% extends 'partials/base.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block title %}
+Store
+{% endblock %}
+{% block 'content' %}
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                <span></span> Shop
+                <span></span> Fillter
+            </div>
+        </div>
+    </div>
+    <div class="page-header mt-30 mb-50">
+        <div class="container">
+            <div class="archive-header">
+                <div class="row align-items-center">
+                    <div class="col-xl-3">
+                        <h1 class="mb-15" style="width: max-content;">Shop</h1>
+                        <div class="breadcrumb">
+                            <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                            <span></span> Shop
+                        </div>
+                    </div>
+                    <!--  <div class="col-xl-9 text-end d-none d-xl-block">
+                            <ul class="tags-list">
+                                <li class="hover-up"><a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Cabbage</a></li>
+                                <li class="hover-up active"><a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Broccoli</a></li>
+                                <li class="hover-up"><a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Artichoke</a></li>
+                                <li class="hover-up"><a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Celery</a></li>
+                                <li class="hover-up mr-0"><a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Spinach</a></li>
+                            </ul>
+                        </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-30 mt-30">
+        <div class="row">
+            <div class="col-lg-12">
+                <a class="shop-filter-toogle " href="#">
+                    <span class="fi-rs-filter mr-5"></span>
+                    Filters
+                    <i class="fi-rs-angle-small-down angle-down"></i>
+                    <i class="fi-rs-angle-small-up angle-up"></i>
+                </a>
+                <div class="shop-product-fillter-header" style="display: none;">
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-2 mb-sm-2">
+                            <div class="card">
+                                <h5 class="mb-30">By Categories</h5>
+                                <div class="categories-dropdown-wrap font-heading">
+                                    <ul>
+                                        {% for category in categories %}
+                                        <li>
+                                            <input type="checkbox" name="checkbox" id="{{category.cid}}"
+                                                value="{{category.id}}" data-filter="category" class="filter-checkbox"
+                                                style="width: 18px;margin:0px 5px;">
+                                            <a href="{% url 'category-product-list' category.cid  %}">
+                                                <img src="{{category.image.url}}" alt="">{{category.title}}</a>
+                                        </li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-2 mb-sm-2">
+                            <div class="card">
+                                <h5 class="mb-30">By Vendors</h5>
+                                <div class="d-flex">
+                                    <div class="custome-checkbox mr-80">
+                                        {% for vendor in vendors %}
+                                        <input class="filter-checkbox form-check-input" type="checkbox" name="checkbox"
+                                            data-filter="vendor" id="{{vendor.vid}}" value="{{vendor.id}}">
+                                        <label class="form-check-label" for="{{vendor.vid}}"><span> {{vendor.title}}
+                                            </span></label>
+                                        <br>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-2 mb-sm-2">
+                            <div class="card">
+                                <h5 class="mb-30">By Tags</h5>
+                                <div class="sidebar-widget widget-tags">
+                                    <ul class="tags-list">
+                                        {% for tag in tags %}
+                                        <li class="hover-up"><a href="blog-category-grid.html"><i
+                                                    class="fi-rs-cross mr-10"></i>Milk</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-5 mb-sm-5">
+                            <div class="card">
+                                <h5 class="mb-10">By Price</h5>
+                                <div class="sidebar-widget price_range range mb-30">
+                                    <h5 class="section-title style-1 mb-30 wow fadeIn animated animated animated"
+                                        style="visibility: visible;">Fill by price</h5>
+                                    <div class="price-filter">
+                                        <div class="price-filter-inner">
+                                            <input type="range" name="ranDge" id="range"
+                                                min="{{ min_max_price.price__min }}"
+                                                value="{{ min_max_price.price__max|floatformat:2}}"
+                                                max="{{min_max_price.price__max|floatformat:2}}" class="slider-range"
+                                                oninput="max_price.value=this.value">
+                                            <div class="price_slider_amount">
+                                                <div class="form-group">
+                                                    <div class="list-group-item mb-10 mt-10">
+                                                        <label class="fw-900">Range:</label>
+                                                        <div class="custome-checkbox">
+                                                            <label class="form-check-labl"><span
+                                                                    id="slider-range-value1">{{min_max_price.price__min}}</span>
+                                                                - <span
+                                                                    id="slider-range-value1">{{ min_max_price.price__max|floatformat:2}}</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <input type="number" id="max_price", 
+                                                        value="{{ min_max_price.price__max|floatformat:2}}"
+                                                        min="{{min_max_price.price__min}}"
+                                                        max="{{min_max_price.price__max}}" placeholder="Current Price"
+                                                        class="mb-10" onkeyup="range.value=this.value">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="custome-checkbox">
+                                    <button class="btn " id="price-filter-btn" style="width: 100%;" type="button"><i
+                                            class="fi-rs-filter mr-5"></i>Filter</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="shop-product-fillter">
+                <div class="totall-product">
+                    <p>We found <strong class="text-brand">29</strong> items for you!</p>
+                </div>
+                <div class="sort-by-product-area">
+                    <div class="sort-by-cover mr-10">
+                        <div class="sort-by-product-wrap">
+                            <div class="sort-by">
+                                <span><i class="fi-rs-apps"></i>Show:</span>
+                            </div>
+                            <div class="sort-by-dropdown-wrap">
+                                <span> 50 <i class="fi-rs-angle-small-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="sort-by-dropdown">
+                            <ul>
+                                <li><a class="active" href="#">50</a></li>
+                                <li><a href="#">100</a></li>
+                                <li><a href="#">150</a></li>
+                                <li><a href="#">200</a></li>
+                                <li><a href="#">All</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sort-by-cover">
+                        <div class="sort-by-product-wrap">
+                            <div class="sort-by">
+                                <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                            </div>
+                            <div class="sort-by-dropdown-wrap">
+                                <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="sort-by-dropdown">
+                            <ul>
+                                <li><a class="active" href="#">Featured</a></li>
+                                <li><a href="#">Price: Low to High</a></li>
+                                <li><a href="#">Price: High to Low</a></li>
+                                <li><a href="#">Release Date</a></li>
+                                <li><a href="#">Avg. Rating</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</main>
+
+
+<main class="main">
+    <div class="container mb-30">
+        <div class="row flex-row-reverse">
+            <div class="col-lg-4-5">
+                <!--End hero-->
+                <section class="product-tabs section-padding position-relative wow fadeIn animated">
+
+                    <!--End nav-tabs-->
+                    <div class="tab-content wow fadeIn animated" id="myTabContent">
+                        <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                            <div class="row product-grid-4"  id="filtered-product">
+                                {% for product in products %}
+
+                                <div class="col-lg-1-5 col-md-4 col-6 col-sm-6">
+                                    <div class="product-cart-wrap mb-30">
+                                        <div class="product-img-action-wrap">
+                                            <div class="product-img product-img-zoom">
+                                                <a href="{% url 'product-detail' product.pid  %}">
+                                                    <img class="default-img" src="{{product.image.url}}" alt="">
+                                                    <img class="hover-img" src="{{product.image.url}}" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="product-action-1">
+                                                {% if product in wishlist %}
+                                                <a aria-label="Remove To The Wishlist"
+                                                    class="action-btn data-to-wishlist"
+                                                    data-product-item="{{product.id}}"><i class="fi-rs-heart"></i></a>
+                                                {% else  %}
+                                                <a aria-label="Add To Wishlist" class="action-btn data-to-wishlist"
+                                                    data-product-item="{{product.id}}"><i class="fi-rs-heart"></i></a>
+
+                                                {% endif %}
+                                                <a aria-label="Compare" class="action-btn" href=""><i
+                                                        class="fi-rs-shuffle"></i></a>
+                                                <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                                    data-bs-target="#quickViewModal-{{product.pid}}"><i
+                                                        class="fi-rs-eye"></i></a>
+                                            </div>
+                                            <div class="product-badges product-badges-position product-badges-mrg">
+                                                <span class="hot"> - {{product.get_percentage|floatformat}}%</span>
+                                            </div>
+                                        </div>
+                                        <div class="product-content-wrap">
+                                            <div class="product-category">
+                                                <a
+                                                    href="{% url 'category-product-list' product.category.cid %}">{{product.category}}</a>
+                                            </div>
+                                            <h2><a href="{% url 'product-detail' product.pid  %}">{{product.title}}</a>
+                                            </h2>
+                                            <div class="product-rate-cover">
+                                                <div class="d-inline-block">
+                                                    <div class="rating-star">
+                                                        <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}"
+                                                            aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and poduct.averageReview < 2 %}-half-o {% endif %}"
+                                                            aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}"
+                                                            aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}"
+                                                            aria-hidden="true"></i>
+                                                        <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}"
+                                                            aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted">
+                                                    ({{product.averageReview}})</span>
+                                            </div>
+                                            <p>By <a href="{% url 'vendor-detail' product.vendor.vid  %}"
+                                                    class="text-muted">{{product.vendor}}</a></p>
+                                            <div>
+                                                <span class="font-small text-muted"></span>
+                                            </div>
+                                            <div class="product-card-bottom">
+                                                <div class="product-price">
+                                                    <span class="current-product-price-{{product.id}}"
+                                                        style="font-size: 12px;">{{product.price|currency:request.session.currency |truncatechars:9}}
+                                                        {{request.session.currency}} </span>
+                                                    <span class="old-price m-0 p-0"
+                                                        style="font-size: 11px;">{{product.old_price|currency:request.session.currency |truncatechars:9}}
+                                                        {{request.session.currency}}</span>
+                                                </div>
+                                                <div class="add-cart">
+                                                    <span class="detail-qty">
+                                                        <span style="display: none;" data-index="{{product.id}}"
+                                                            class="qty-val">1</span>
+                                                    </span>
+                                                    <li class="active" style="display: none;">
+                                                        <input type="hidden" class="product-color-{{product.id}}"
+                                                            value="{{product_variation.color.value}}">
+                                                        <input type="hidden" class="product-color-name-{{product.id}}"
+                                                            value="{{product_variation.color.color}}">
+                                                        <input type="hidden" class="product-size-{{product.id}}"
+                                                            value="{{product_variation.size.size}}">
+                                                        <a href="#"
+                                                            style="background-color:{{product_variation.color.value}} ; border: 5px;">{{product_variation.size.size}}</a>
+                                                    </li>
+                                                    <input type="hidden" value="1" id="product-quantity"
+                                                        class="product-quantity-{{product.id}}">
+                                                    <input type="hidden" class="product-pid-{{product.id}}"
+                                                        value="{{product.pid}} ">
+                                                    <input type="hidden" class="product-image-{{product.id}}"
+                                                        value="{{ product.image.url }}">
+                                                    <input type="hidden" class="product-vendor-{{product.id}}"
+                                                        value="{{ product.vendor.title }}">
+                                                    <input type="hidden" class="product-id-{{product.id}}"
+                                                        value="{{ product.id }}">
+                                                    <input type="hidden" class="product-title-{{product.id}}"
+                                                        value="{{ product.title}}">
+                                                    <input type="hidden" class="url" value="{% url 'add-to-cart'%}">
+                                                    <a class="add add-to-cart-btn b-0" data-index="{{product.id}}"
+                                                        id="add-to-cart-btn"><i class="fi-rs-shopping-bag mr-5"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <!--end product card-->
+                            </div>
+                            <!--End product-grid-4-->
+                        </div>
+                        <!--En tab one-->
+                    </div>
+                    <!--End tab-content-->
+                </section>
+            </div>
+
+            <div class="col-lg-1-5 primary-sidebar sidebar sticky-sidebar pt-30 row">
+                <div class="sidebar-widget price_range range mb-30">
+                    <h5 class="section-title style-1 mb-30">Fill by price</h5>
+                    <div class="price-filter">
+                        <div class="price-filter-inner">
+                            <div id="slider-range" class="mb-20"></div>
+                            <div class="d-flex justify-content-between">
+                                <div class="caption">From: <strong id="slider-range-value1" class="text-brand"></strong></div>
+                                <div class="caption">To: <strong id="slider-range-value2" class="text-brand"></strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i> Fillter</a>
+                </div>
+                <div class="sidebar-widget widget-category-2 mb-30 c-4">
+                    <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
+                    <ul>
+                        {% for category in categories %}
+                        <li style="
+                        /* padding: 9px; */
+                        /* width: 8px; */
+                        height: 48px;
+                        width: max-content;
+                    ">
+                            <input type="checkbox" name="checkbox" id="{{category.cid}}" value="{{category.id}}"
+                                data-filter="category" class="filter-checkbox" style="width: 18px;margin:0px 5px;">
+                            <a href="{% url 'category-product-list' category.cid  %}">
+                                <img src="{{category.image.url}}" alt="">{{category.title}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="sidebar-widget widget-category-2 mb-30 c-4">
+                    <h5 class="mb-30">By Vendors</h5>
+                    <div class="d-flex">
+                        <div class="custome-checkbox mr-80">
+                            {% for vendor in vendors %}
+                            <input class="filter-checkbox form-check-input" type="checkbox" name="checkbox"
+                                data-filter="vendor" id="{{vendor.vid}}-2" value="{{vendor.id}}">
+                            <label class="form-check-label" for="{{vendor.vid}}-2" style="
+                            width: max-content;
+                        "><span> {{vendor.title}} </span></label>
+                            <br>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-widget widget-category-2 mb-30 c-4">
+                    <div class="card border-0" >
+                        <h5 class="mb-30">By Tags</h5>
+                        <div class="sidebar-widget widget-tags">
+                            <ul class="tags-list">
+                                {% for tag in tags %}
+                                <li class="hover-up"><a href="blog-category-grid.html"><i
+                                            class="fi-rs-cross mr-10"></i>Milk</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                        <div class="card border-0">
+                        
+                            <div class="sidebar-widget price_range range mb-30">
+                                <h5 class="section-title style-1 mb-30 wow fadeIn animated animated animated"
+                                    style="visibility: visible;">Fill by price</h5>
+                                <div class="price-filter">
+                                    <div class="price-filter-inner">
+                                        <input type="range" name="ranDge" id="range"
+                                            min="{{ min_max_price.price__min }}"
+                                            value="{{ min_max_price.price__max|floatformat:2}}"
+                                            max="{{min_max_price.price__max|floatformat:2}}" class="slider-range "
+                                            oninput="max_price.value=this.value">
+                                        <div class="price_slider_amount">
+                                            <div class="form-group">
+                                                <div class="list-group-item mb-10 mt-10">
+                                                    <label class="fw-900">Range:</label>
+                                                    <div class="custome-checkbox">
+                                                        <label class="form-check-labl"><span
+                                                                id="slider-range-value1">{{min_max_price.price__min}}</span>
+                                                            - <span
+                                                                id="slider-range-value1">{{min_max_price.price__max}}</span></label>
+                                                    </div>
+                                                </div>
+                                                <input type="number" id="max_price1"
+                                                    value="{{ min_max_price.price__max|floatformat:2}}"
+                                                    min="{{min_max_price.price__min}}"
+                                                    max="{{min_max_price.price__max}}" placeholder="Current Price"
+                                                    class="mb-10" onkeyup="range.value=this.value">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="custome-checkbox">
+                                <button class="btn " id="price-filter-btn" style="width: 100%;" type="button"><i
+                                        class="fi-rs-filter mr-5"></i>Filter</button>
+                            </div>
+                        </div>
+
+                 
+                <!-- Fillter By Price -->
+            </div>
+        </div>
+    </div>
+    <section class="popular-categories section-padding">
+        <div class="container wow fadeIn animated">
+            <div class="section-title">
+                <div class="title">
+                    <h3>Shop by Categories </h3>
+                    <a class="show-all" href="{% url 'category-list'  %}">
+                        All Categories
+                        <i class="fi-rs-angle-right"></i>
+                    </a>
+                </div>
+                <div class="slider-arrow slider-arrow-2 flex-right carausel-8-columns-arrow"
+                    id="carausel-8-columns-arrows"></div>
+            </div>
+            <div class="carausel-8-columns-cover position-relative">
+                <div class="carausel-8-columns" id="carausel-8-columns">
+                    {% for category in categories %}
+                    <div class="card-1">
+                        <figure class=" img-hover-scale overflow-hidden">
+                            <a href="shop-grid-right.html"><img src="{{category.image.url}}" alt=""></a>
+                        </figure>
+                        <h6><a href="shop-grid-right.html">{{category.title}} </a></h6>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

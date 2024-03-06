@@ -1,0 +1,258 @@
+{% extends 'partials/base.html' %}
+{% load currency %}
+{% load static %}
+{% block title %}
+ Cart
+{% endblock %}
+{% block 'content' %}
+
+<main class="main" id="cart-list">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                <span></span> Shop
+                <span></span> Cart
+            </div>
+        </div>
+    </div>
+    <div class="container mb-80 mt-50">
+        {% if cart_data.items %}
+        <div class="row">
+            <div class="col-lg-8 mb-40">
+                <h1 class="heading-2 mb-10">Your Cart</h1>
+                <div class="d-flex justify-content-between">
+                    <h6 class="text-body">There are <span class="text-brand">3</span> products in your cart</h6>
+                    <h6 class="text-body"><a href="#" class="text-muted"><i class="fi-rs-trash mr-5"></i>Clear Cart</a></h6>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="table-responsive shopping-summery">
+                    <table class="table table-wishlist">
+                        {% if cart_data.items %}
+                        <thead>
+                            <tr class="main-heading">
+                                <th scope="col" class=" start pl-30">Product image</th>
+                                <th scope="col">product title</th>
+                                <th scope="col">Subtotal</th>
+                                <th scope="col" class="text-center">Quantity</th>
+                                <th scope="col">Subtotal</th>
+                                <th scope="col">refresh</th>
+                                <th scope="col" class="end">Remove</th>
+                            </tr>
+                        </thead>
+                        {% endif %}
+                    
+                        <tbody>
+                           
+                            {% for product_id , item in cart_data.items %}
+                            <tr class="pt-30">
+                                <td class="image product-thumbnail pt-40"><img src="{{ item.image }}" alt="#"></td>
+                                <td class="product-des product-name">
+                                    <h6 class="mb-5"><a class="product-name mb-10 text-heading" href="{% url 'product-detail' item.pid %}">{{ item.title }}</a></h6>
+                                    <!-- <h6 class="mb-5"><a class="product-name mb-10 text-heading" href="{% url 'product-detail' item.pid  %}">vendor :{{ item.vendor.title }}</a></h6> -->
+                                    {% if item.size %}
+                                    <h6 class="mb-5"><a class="product-name mb-10 text-heading" href="{% url 'product-detail' item.pid  %}">size :{{ item.size }}</a></h6>
+                                        
+                                    {% endif %}
+                                    {% if item.color_name %}
+                                    <h6 class="mb-5"><a class="product-name mb-10 text-heading" href="{% url 'product-detail' item.pid  %}">color : <input type="color" style="width: 16px; height: 16px;border: 0px;padding: 0px;border-radius: 50px; border-color:{{item.color}};" disabled value="{{item.color}}"> ({{item.color_name}}) </a></h6>
+                                        
+                                    {% endif %}
+                                </td>
+                                <td class="price" data-title="Price">
+                                    <h4 class="text-body">{{item.price|currency:request.session.currency}} {{request.session.currency}}</h4>
+                                </td>
+                                <td class="text-center detail-info" data-title="Stock">
+                                    <div class="detail-extralink mr-15">
+                                        <div class="detail-qty qtty border radius">
+                                            <a href="#" class="qty-down" data-product-id="{{item.pid}}"><i class="fi-rs-angle-small-down"></i></a>
+                                            <input type="hidden" class="url2" value="{% url 'update_cart'%}">
+
+                                            <span class="qty-val product-qty-{{product_id}}">{{item.qty}}</span>
+                                            <a href="#" class="qty-up" data-product-id="{{item.pid}}"><i class="fi-rs-angle-small-up"></i></a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="price" data-title="Price">
+                                    <h4 class="text-brand">{% widthratio item.price|currency:request.session.currency 1 item.qty %}  {{request.session.currency}}</h4>
+                                </td>
+                                <td class="action text-center" data-title="Refresh"><a data-product="{{product_id}}" class="text-body update-product" ><i class="fi-rs-refresh"></i></a></td>
+                                <input type="hidden" class="url1" value="{% url 'delete-from-cart'%}">
+                                
+                                <td class="action text-center" data-title="Remove"><a class="text-body delete-product" data-product="{{product_id}}"><i class="fi-rs-trash"></i></a></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="divider-2 mb-30"></div>
+                <div class="cart-action d-flex justify-content-between">
+                    <a class="btn" href="{% url 'product-list'  %}"><i class="fi-rs-arrow-left mr-10"></i>Continue Shopping</a>
+                    <!-- <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-refresh mr-10"></i>Update Cart</a> -->
+                </div>
+ <div class="row mt-50">
+    {% if address %}
+    
+    <div class="col-lg-7">
+                        <div class="calculate-shiping p-10 border-radius-15 row">
+                            <h4 class="mb-10">Shipping Address</h4>
+
+                            {% for address in address %}
+                            
+                            <div class="col-lg-6">
+                                <div class="card my-3 mb-lg-0 cart-totals  px-2 ">
+                                        <h5 class="mb-0 p-10">Billing Address {{forloop.counter}} </h5>
+                                    <div class="card-body  rounded">
+                                        <address>Country : {{address.country}}</address>
+                                        <address>Regions : {{address.region}}</address>
+                                        <address>City : {{address.city}}</address>
+                                        <address>Address line 1 : {{address.address_line_1}}</address>
+                                        {% if address.address_line_2 %}
+                                        <address>Address line 2 : {{address.address_line_2}}</address>
+                                        {% endif %}
+                                        {% if address.mobile %}
+                                        <address>Numero de telephone :{{address.mobile}}</address>
+                                        {% endif %}
+                                        <hr style="margin-bottom:10px; color: rgba(240, 255, 255, 0);">
+                                        <!-- {% if address.status %}
+                                        <td>Status : <span style="color: green;" data-address-id="{{address.id}}" class="check{{address.id}} check" > Default </span> </td>
+                                        <div class="row mt-10">
+                                            <div class="col">
+                                        <button data-address-id="{{address.id}}" style="display: none;" class="btn  make-default-address button{{address.id}} action_btn font-weight-old">Make default</button>
+                                            </div>
+                                        </div>
+                                        {% else  %}
+                                        <td>Status : <span style="color: green; " style="display: none;"   data-address-id="{{address.id}}" class="check{{address.id}} check" > approuved </span> </td>
+                                        <div class="row mt-10">
+                                            <div class="col">
+                                        <button data-address-id="{{address.id}}"  class="btn make-default-address button{{address.id}} action_btn font-weight-old">Make default</button>
+                            
+                                            </div>
+                                        </div>
+                                        {% endif %} -->
+                            
+                                        {% if address.status %}
+
+                                        <td class="mt-10 text-end"><span data-address-id="{{address.id}}" class="fa fa-check-circle text-success check{{address.id}} check"><span>  Default </span></span></td>
+                                        <td class="mt-10 text-end">
+                                            <button data-address-id="{{address.id}}" url="{% url 'make-default'%}" style="display: none;" class="btn make-default-address  button{{address.id}} action_btn"> 
+                                            <input type="hidden" >
+                                                Make Default
+                                            </button>                                        
+                                        </td>
+                                        {% else  %}
+                                        <td class="mt-10 text-end">
+                                        <span data-address-id="{{address.id}}" style="display: none;" class="fa fa-check-circle text-success check check{{address.id}}"> Default </span> 
+                                        </td>
+                                        <td class="mt-10 text-end">
+                                        <button data-address-id="{{address.id}}" url="{% url 'make-default'%}" class="btn make-default-address  button{{address.id}} action_btn">Make Default</button>
+                                        </td>
+                                        {% endif %}
+                            
+                                    </div>
+                                </div>
+                            </div> 
+                            {% endfor %}
+                            {% else  %}
+
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-lg-5 cart-totals ">
+                        <form method="POST" class="mt-50">
+                            {% csrf_token %}
+                            <div class="row">
+                                        
+                                <div class="form-group col-md-6">
+                                    <label>Country<span class="required">*</span></label>
+                                    <input required="" class="form-control" name="country" type="text">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Regions<span class="required">*</span></label>
+                                    <input required="" class="form-control" name="regions" type="text">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>City<span class="required">*</span></label>
+                                    <input required="" class="form-control" name="city" type="text">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Address line 1<span class="required">*</span></label>
+                                    <input required="" class="form-control" name="address_line_1" type="text">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Address line 2</label>
+                                    <input class="form-control" name="address_line_2" type="text">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Phone<span class="required">*</span></label>
+                                    <input required="" class="form-control" name="mobile">
+                                </div>
+                                <div class="col-md-12 mt-20 form-group">
+                                    <button class="btn" name="submit" value="Submit">Save</button>
+                                </div>
+                        
+                                        </div>
+                        </form>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-lg-4">
+                <div class="border p-md-4 cart-totals ml-30">
+                    <div class="table-responsive">
+                        <table class="table no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="cart_total_label">
+                                        <h6 class="text-muted">Subtotal</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h4 class="text-brand text-end">{{cart_total_amount|currency:request.session.currency}} {{request.session.currency}}</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td scope="col" colspan="2">
+                                        <div class="divider-2 mt-10 mb-10"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="cart_total_label">
+                                        <h6 class="text-muted">Shipping</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h5 class="text-heading text-end">Free</h4</td> </tr> <tr>
+                                    <!-- <td class="cart_total_label">
+                                        <h6 class="text-muted">Estimate for</h6>
+                                    </td> -->
+                                    <!-- <td class="cart_total_amount">
+                                        <h5 class="text-heading text-end">  {{address.address}}</h4</td> </tr> <tr> -->
+                                    <td scope="col" colspan="2">
+                                        <div class="divider-2 mt-10 mb-10"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="cart_total_label">
+                                        <h6 class="text-muted">Total</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h4 class="text-brand text-end">{{cart_total_amount|currency:request.session.currency}} {{request.session.currency}}</h4>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="{% url 'checkout'  %}" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                </div>
+            </div>
+        </div>
+        {% else  %}
+        <div class="card-body" style="height:500px;">
+            <h2 class="text-center">Any product found !</h2>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

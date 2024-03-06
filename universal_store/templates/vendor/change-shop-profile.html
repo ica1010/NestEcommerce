@@ -1,0 +1,249 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<section class="content-main">
+    <div class="content-header">
+        <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
+    </div>
+
+    <div class="product-cart-wrap mb-30">
+        <div class="product-img-action-wrap card-header bg-brand-2 archive-header-3 archive-header" id="imageDisplay1" style="height: 200px ; background-image: url({{vendor.cover_image.url}});">
+            <img src="" alt="">
+            <div class="product-action-1">
+                <a aria-label="change" class="action-btn" href=""><i
+                        class="fi-rs-edit"></i></a>
+                <a aria-label="Delete" class="action-btn bg-danger"><i
+                        class="fi-rs-trash"></i></a>
+            </div>
+            <div class="product-badges product-badges-position product-badges-mrg">
+                <span class="hot">Pofessional</span>
+            </div>
+            <div class="product-cart-wrap" class="col-xl col-lg flex-grow-0" style="flex-basis: 230px ; border-radius: 100px; padding: 0px !important;    width: min-content;">
+                <div class="product-img-action-wrap" class="img-thumbnail shadow w-100 bg-white position-relative text-center"
+                style="width: fit-content; border-radius: 100px;overflow: hidden;height: fit-content;padding: 0px; width: min-content;">
+                   
+                    <div class="product-action-1">
+                        <a aria-label="change" class="action-btn" href="" onclick=uploadProfilImage()><i
+                                class="fi-rs-edit"></i></a>
+                        <a aria-label="Delete" class="action-btn bg-danger"><i
+                                class="fi-rs-trash"></i></a>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl col-lg flex-grow-0" style="flex-basis: 230px ; border-radius: 100px;">
+                            <div class="img-thumbnail shadow w-100 bg-white position-relative text-center"
+                                style="height: 120px !important; width: 120px !important;border-radius: 100px;overflow: hidden;">
+                                <img src="{{vendor.image.url}}" class="center-xy img-fluid" id="imageDisplay"
+                                    style="border-radius: 100px;" alt="Logo Brand" />
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-xl col-lg flex-grow-0" style="flex-basis: 230px ; border-radius: 100px;">
+                    <div class="img-thumbnail shadow w-100 bg-white position-relative text-center"
+                        style="height: 120px !important; width: 120px !important;border-radius: 100px;overflow: hidden;">
+                        <img src="{{vendor.image.url}}" class="center-xy img-fluid"
+                            style="border-radius: 100px;" alt="Logo Brand" />
+                    </div>
+                </div>
+            </div> -->
+        
+        </div>
+    </div>
+  
+
+
+
+
+
+        <div class="card mb-4">
+        <!-- <div class="card-header bg-brand-2 archive-header-3 archive-header"
+            style="height: 200px ; background-image: url({{vendor.cover_image.url}});"></div>
+        --><div class="card-body"> 
+            <div class="card-body">
+                <form method="post" action="{% url 'shop-change-profile'%}" id="uploadForm"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="row">
+                      
+                        <div class="my-2 col-md-12">
+                            <label><span class="required"></span></label>
+                            <input required="" class="form-control" style="text-align: center;" disabled
+                                value="Shop's Informations " name="dname" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Shop name <span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{vendor.title}}" name="title" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <input required="" class="form-control" type="hidden">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <!-- <label>image<span class="required">*</span></label> -->
+                            <input type="file" name="image" class="form-control" id="imageInput" >
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <!-- <label>Cover image<span class="required">*</span></label> -->
+                            <input type="file" name="cover_image" class="form-control" id="imageInput1">
+                        </div>
+                        <div class="my-2 col-md-12">
+                            <label>Description <span class="required">*</span></label>
+                            <!-- <input required="" class="form-control"  name="email" type="email"> -->
+                            <textarea name="description" cols="30" rows="10"
+                                class="form-control">{{vendor.description |safe}}</textarea>
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Contact<span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{vendor.contact}}" name="phone" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Address<span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{vendor.address}}" name="address"
+                                type="text">
+                        </div>
+                        <div class="my-2 col-md-12">
+                            <label><span class="required"></span></label>
+                            <input required="" class="form-control" style="text-align: center;" disabled
+                                value="Social media" name="dname" type="text">
+                        </div>
+                        <div class="row">
+                            <div class="my-2 col-md-3" style="width: 120px;">
+                                <center>
+                                    <h4 style="font-weight: 100;">Facebook :</h4>
+                                </center>
+                            </div>
+                            <div class="my-2 col-md-6">
+                                <input class="form-control" value="{{vendor.facebook}}" name="facebook" type="url">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="my-2 col-md-3" style="width: 120px;">
+                                <center>
+                                    <h4 style="font-weight: 100;">Instagram :</h4>
+                                </center>
+                            </div>
+                            <div class="my-2 col-md-6">
+                                <input class="form-control" value="{{vendor.instagram}}" name="instagram" type="url">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="my-2 col-md-3" style="width: 120px;">
+                                <center>
+                                    <h4 style="font-weight: 100;">Twitter :</h4>
+                                </center>
+                            </div>
+                            <div class="my-2 col-md-6">
+                                <input class="form-control" value="{{vendor.twitter}}" name="twitter" type="url">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="my-2 col-md-3" style="width: 120px;">
+                                <center>
+                                    <h4 style="font-weight: 100;">Printerest :</h4>
+                                </center>
+                            </div>
+                            <div class="my-2 col-md-6">
+                                <input class="form-control" value="{{vendor.printerest}}" name="printerest" type="url">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="my-2 col-md-3" style="width: 120px;">
+                                <center>
+                                    <h4 style="font-weight: 100;">Youtube :</h4>
+                                </center>
+                            </div>
+                            <div class="my-2 col-md-6">
+                                <input class="form-control" value="{{vendor.youtube}}" name="youtube" type="url">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="my-2 col-md-3" style="width: 120px;">
+                                <center>
+                                    <h4 style="font-weight: 100;">Tiktok :</h4>
+                                </center>
+                            </div>
+                            <div class="my-2 col-md-6">
+                                <input class="form-control" value="{{vendor.tiktok}}" name="tiktok" type="url">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mt-20">
+                            <button class="btn" name="submit" value="Submit">Save change</button>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <!--  row.// -->
+        </div>
+        <!--  card-body.// -->
+    </div>
+</section>
+<script>
+const imageInput = document.getElementById('imageInput');
+const imageDisplay = document.getElementById('imageDisplay');
+
+
+const imageInput1 = document.getElementById('imageInput1');
+const imageDisplay1 = document.getElementById('imageDisplay1');
+
+
+imageInput.addEventListener('change', function () {
+const file = imageInput.files[0];
+if (file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        // Afficher la nouvelle image
+        imageDisplay.src = e.target.result;
+        imageDisplay.style.display = 'block';
+
+        // Vous pouvez également effectuer des modifications ici, si nécessaire
+
+        // Remplacer l'ancienne image
+        // Note : ceci est une opération côté client et ne modifie pas l'image sur le serveur
+        // Vous devrez mettre en œuvre la logique côté serveur si vous souhaitez réellement remplacer l'image.
+    };
+
+    reader.readAsDataURL(file);
+}
+});
+
+
+
+imageInput1.addEventListener('change', function () {
+const file = imageInput1.files[0];
+if (file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        // Afficher la nouvelle image
+        // imageDisplay1.src = ;
+        imageDisplay1.style.backgroundImage = 'url('+e.target.result+')';
+       console .log(e.target.result)
+
+        // Vous pouvez également effectuer des modifications ici, si nécessaire
+
+        // Remplacer l'ancienne image
+        // Note : ceci est une opération côté client et ne modifie pas l'image sur le serveur
+        // Vous devrez mettre en œuvre la logique côté serveur si vous souhaitez réellement remplacer l'image.
+    };
+
+    reader.readAsDataURL(file);
+}
+});
+
+function uploadProfilImage() {
+        // Cliquez sur le bouton de téléchargement de fichier caché
+        document.getElementById('imageInput').click();
+}
+
+</script>
+{% endblock %}

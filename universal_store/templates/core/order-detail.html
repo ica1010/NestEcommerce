@@ -1,0 +1,127 @@
+
+{% load i18n %}
+{% load currency %}
+
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Nest - Multipurpose eCommerce HTML Template</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/imgs/theme/favicon.svg' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/main2.css' %}" />
+</head>
+<body style="zoom: 0.9;">
+    <div class="invoice invoice-content invoice-2">
+        <div class="back-top-home hover-up mt-30 ml-30">
+            <a class="hover-up" href="{% url 'costumer-dashboard'  %}"><i class="fi-rs-home mr-5"></i>Go Back</a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="invoice-inner">
+                        <div class="invoice-info" id="invoice_wrapper">
+                            <div class="invoice-top">
+                                <div class="row mt-2">
+                                    <div class="col-lg-9 col-md-6">
+                                        <h4 class="invoice-title-1 mb-10">Due Date:</h4>
+                                        <p class="invoice-from-1">30 November 2022</p>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <h4 class="invoice-title-1 mb-10">Payment Method</h4>
+                                        <p class="invoice-from-1">Via Paypal</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-center">
+                                <div class="table-responsive">
+                                    <table class="table table-striped invoice-table">
+                                        <thead class="bg-active">
+                                            <tr>
+                                                <th>Invoice</th>
+                                                        <th>Product</th>
+                                                        <th>title</th>
+                                                        <th>status</th>
+                                                        <th>Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for product in  order_products %}
+                                            <tr> <td>{{product.invoice_no}}</td>
+                                                <td><img src="{{product.image}}" width="50" height="50" style="border-radius: 5px;" alt=""></td>
+                                                <td>{{product.item}}</td>
+                                                <td>{{product.product_status}}</td>
+                                                <td>{{product.price|currency:request.session.currency}}  {{request.session.currency}}</td>
+                                                <td>{{product.qty}}</td>
+                                                <td>{{product.total}}</td>
+                                                
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="invoice-bottom">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <h3 class="invoice-title-1">Important Note</h3>
+                                            <ul class="important-notes-list-1">
+                                                <li>All amounts shown on this invoice are in US dollars</li>
+                                                <li>finance charge of 1.5% will be made on unpaid balances after 30 days.</li>
+                                                <li>Once order done, money can't refund</li>
+                                                <li>Delivery might delay due to some external dependency</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-offsite">
+                                        <div class="text-end">
+                                            <p class="mb-0 text-13">Thank you for your business</p>
+                                            <p><strong>AliThemes JSC</strong></p>
+                                            <div class="mobile-social-icon mt-50 print-hide">
+                                                <h6>Follow Us</h6>
+                                                <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-facebook-white.svg' %}" alt="" /></a>
+                                                <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-twitter-white.svg' %}" alt="" /></a>
+                                                <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-instagram-white.svg' %}" alt="" /></a>
+                                                <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-pinterest-white.svg' %}" alt="" /></a>
+                                                <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-youtube-white.svg' %}" alt="" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invoice-btn-section clearfix d-print-none">
+                            <a href="javascript:window.print()" class="btn btn-lg btn-custom btn-print hover-up"> <img src="{% static 'assets/imgs/theme/icons/icon-print.svg' %}" alt="" /> Print </a>
+                            <a id="invoice_download_btn" class="btn btn-lg btn-custom btn-download hover-up"> <img src="{% static 'assets/imgs/theme/icons/icon-download.svg' %}" alt="" /> Download </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <script data-cfasync="false" src="{% static '/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="{% static 'assets/js/vendor/modernizr-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-3.6.0.min.js' %}"></script>
+    <!-- Invoice JS -->
+    <script src="{% static 'assets/js/invoice/jspdf.min.js' %}"></script>
+    <script src="{% static 'assets/js/invoice/invoice.js' %}"></script>
+</body>
+
+</html>
+
+
+
+
+
+

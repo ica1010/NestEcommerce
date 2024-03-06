@@ -1,0 +1,1440 @@
+{% load static %}
+{% load i18n %}
+{% load i18n %}
+{% load currency %}
+{% currency_context %}
+{% load notifications_tags %}
+{% notifications_unread as unread_count %}
+<!DOCTYPE html>
+<html class="no-js" lang="{% get_current_language as LANGUAGE_CODE  %}{{LANGUAGE_CODE}}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Nest - {% block title %}{% endblock %}</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+    <!-- boostrapp link -->
+    <!--
+      - google font link
+    -->
+
+    <!-- Font awesome 5 -->
+    <!-- <link href="{% static 'assets/css/vendorcss.css' %}" rel="stylesheet" type="text/css" /> -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <link href="{% static 'assets/fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/imgs/theme/favicon.svg' %}">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/mainc619.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style-prefix.css' %}">
+</head>
+<style>
+    /* .main-menu>nav>ul>li ul.mega-menu li.sub-mega-menu-width-22::after {
+        content: '';
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        width: 1px;
+        height: 100%;
+        background: #dedfe2;
+    } */
+
+    /* Hide Radio button */
+    a {
+        text-decoration-line: none;
+    }
+
+    .rate>input {
+        display: none;
+    }
+
+    .rate {
+        display: inline-block;
+        ;
+        border: 2px;
+    }
+
+    .rate>label {
+        float: right;
+    }
+
+    /* Showing the stars */
+    .rate>label:before {
+        display: inline-block;
+        font-size: 1.1rem;
+        font-family: FontAwesome;
+        content: "\f005";
+        margin: 0;
+        padding: 0.3rem .2rem;
+        cursor: pointer;
+    }
+
+    /* Half star */
+    .rate .half:before {
+        font-family: FontAwesome;
+        content: "\f089";
+        position: absolute;
+        padding-right: 0;
+    }
+
+    /* Click and hover */
+    input:checked~label,
+    label:hover~label {
+        color: #ffb503;
+        border-color: #ffb503;
+    }
+
+    /* hover hightlight */
+    input:checked+label:hover,
+    input:checked~label:hover,
+    input:checked~label:hover~label,
+    label:hover~input:checked~label {
+        color: #cc9000;
+    }
+
+    .rating-star i {
+        color: #ffb503 !important;
+        border-bottom: #ffb503;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0 4px;
+    }
+
+    .column {
+        flex: 50%;
+        max-width: 50%;
+        padding: 0 4px;
+    }
+
+    .alert {
+        color: white;
+        border-radius: 0px;
+        box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.171)
+    }
+
+    .alert-error {
+        background-color: #ff2f19;
+    }
+
+    .alert-success {
+        background-color: green;
+    }
+
+    .alert-warning {
+        background-color: rgb(160, 150, 12);
+    }
+
+    .mobile-bottom-navigation {
+        height: 62px;
+        background: var(--white);
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 500px;
+        margin: auto;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+        justify-content: space-around;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.25);
+        box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.25);
+        z-index: 10;
+        border-radius: 10px 10px 0px 0px;
+        padding: 10px 0px 0px 2px;
+    }
+
+    @media only screen and (max-width: 992px) {
+        .mobile-bottom-navigation {
+            display: flex;
+        }
+
+        .sidebar {
+            display: none;
+        }
+    }
+
+    @media only screen and (min-width: 992px) {
+        .mobile-bottom-navigation {
+            display: none;
+        }
+    }
+
+    @media only screen and (min-width: 992px) and (max-width:1200px) {
+        .d-fn {
+            display: none;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /*     .c-4{
+        width: 100%;
+    } */
+    }
+
+    @media only screen and (max-width: 992px) and (min-width:1200px) {
+
+        .d-fn {
+            display: block;
+        }
+
+
+    }
+
+    html {
+        zoom: 0.8;
+    }
+</style>
+
+<body>
+
+    {% if notif %}
+    <div class="notification-toast" data-toast>
+
+        <button type="button" class=" toast-close-btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <div class="toast-banner">
+            <img src="./assets/images/products/jewellery-1.jpg" alt="Rose Gold Earrings" width="80" height="70">
+        </div>
+
+        <div class="toast-detail">
+
+            <p class="toast-message">
+             {{notif.verb}}
+            </p>
+
+            <p class="toast-title">
+             {{notif.verb}}
+             Rose Gold Earrings 
+            </p>
+
+            <p class="toast-meta">
+                <time datetime="PT2M">2 Minutes</time> ago
+            </p>
+
+        </div>
+
+    </div>
+    {% endif %}
+ 
+    <header class="header-area header-style-1 header-height-2">
+        <div class="mobile-promotion" id="news-flash2" style="max-height:37px;">
+
+            <ul>
+                <li>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</li>
+                <li>100% Secure delivery without contacting the courier</li>
+                <li>Supper Value Deals - Save more with coupons</li>
+                <li>Trendy 25silver jewelry, save up 35% off today</li>
+            </ul>
+        </div>
+        <div class="header-top header-top-ptb-1 d-none d-lg-block px-2">
+            <div class="">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info">
+                            <ul>
+                                <li><a href="{% url 'about'  %}" style="width: max-content;">About Us</a></li>
+                                {% if user.is_authenticated %}
+                                <li><a href="{% url 'costumer-dashboard'  %}" style="width: max-content;">My Account</a>
+                                </li>
+                                <li><a href="{% url 'sign-out'  %}" style="width: max-content;">sign out</a></li>
+                                {% else %}
+                                <li><a href="{% url 'sign-up'  %}" style="width: max-content;">sign up</a></li>
+                                <li><a href="{% url 'sign-in'  %}" style="width: max-content;">sign in</a></li>
+                                {% endif %}
+                                <li><a href="{% url 'wishlist'  %}" style="width: max-content;">Wishlist</a></li>
+                                <li><a href="shop-order.html" style="width: max-content;">Order Tracking</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-4">
+                        <div class="text-center">
+                            <div id="news-flash" class="d-inline-block">
+                                <ul>
+                                    <li>100% Secure delivery without contacting the courier</li>
+                                    <li>Supper Value Deals - Save more with coupons</li>
+                                    <li>Trendy 25silver jewelry, save up 35% off today</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info header-info-right header-top-actions">
+                            <ul>
+                                <li style="width:300px;">Need help? Call Us: <strong class="text-brand"> +1800
+                                        900</strong></li>
+                                <li>
+                                    <div class="" style="border-radius: 0px !important;">
+                                        <form action="{% url 'selectlanguage'  %}" method="post"
+                                            style="border-radius: 0px !important;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="text" value="{{ redirect_to }}">
+                                <li>
+                                    <select class="" onchange="submit()"
+                                        style="border-radius: 0px !important; padding: 7px 0;font-size: 13px; line-height: 1;"
+                                        id="" name="language">
+                                        {% get_current_language as LANGUAGE_CODE %}
+                                        {% get_available_languages as LANGUAGES %}
+                                        {% get_language_info_list for LANGUAGES as languages %}
+
+                                        {% for language in languages %}
+                                        <option value="{{language.code}}" {% if language.code == LANGUAGE_CODE %} selected
+                                            {% endif %}>{{language.name_local}} ({{language.code}}) </option>
+
+                                        {% endfor %}
+
+                                    </select>
+                                    <noscript>
+                                        <input type="submit" value="Set">
+                                    </noscript>
+                                </li>
+                                </form>
+                        </div>
+                        </li>
+
+                        <li>
+                            <div style="border-radius: 0px !important;">
+                                <form action="{% url 'selectcurrency' %}" method="post" id="currency_switcher"
+                                    style="border-radius: 0px !important;">
+                                    {% csrf_token %}
+                                    <select name="currency"
+                                        onchange="document.getElementById('currency_switcher').submit()"
+                                        style="border-radius: 0px !important; padding: 7px 0; font-size: 13px; line-height: 1;">
+                                        {% for currency in CURRENCIES %}
+                                        <option value="{{ currency.code }}" {% if currency.code == request.session.currency %} selected='selected' {% endif %}>
+                                            {{ currency.symbol }} {{ currency.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <noscript>
+                                        <input type="submit" value="Set">
+                                    </noscript>
+                                </form>
+
+                            </div>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
+            <div class="container">
+                <div class="header-wrap">
+                    <div class="logo logo-width-1">
+                        <a href="{% url 'Home'  %}"><img src="{% static 'assets/imgs/theme/logo.svg' %}" alt="logo"></a>
+                    </div>
+                    <div class="header-right">
+                        <div class="search-style-2" style="width: 100%;">
+                            <form action="{% url 'search' %}" method="GET" style="width: 100%;">
+                                <select class="select-active" name="category">
+                                    <option value="all">All Categories</option>
+                                    {% for category in categories %}
+                                    <option value="{{category.title}}">{{category.title}}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class="select-active" name="type">
+                                    <option value="product">products</option>
+                                    <option value="service">services</option>
+                                </select>
+                                <input type="search" placeholder="Enter your product or service name..." name="q"
+                                    style="width: 100%;">
+                                <a href="" type="submit">
+                                    <button>
+                                        <i class="fi-rs-search" style="font-weight: 700;font-size: 22px;"></i>
+                                    </button>
+                                </a>
+                            </form>
+                        </div>
+                        <div class="header-action-right">
+                            <div class="header-action-2">
+                                <div class="search-location" style="border-radius: 0px !important;">
+                                    <form action="#" style="border-radius: 0px !important;">
+                                        <select class="select-active" id="location-select"
+                                            style="border-radius: 0px !important;" id="location">
+
+                                        </select>
+                                    </form>
+                                </div>
+                                <!--  <div class="header-action-icon-2">
+                                    <a href="shop-compare.html">
+                                        <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-compare.svg' %}" />
+                                        <span class="pro-count blue">3</span>
+                                    </a>
+                                    <a href="shop-compare.html"><span class="lable ml-0">Compare</span></a>
+                                </div> -->
+
+                                <div class="header-action-icon-2">
+                                    <!-- <a href="{% url 'wishlist'  %}">
+                                        <i class="fa fa-comments svgInject"></i>
+                                        <span class="pro-count blue">
+                                            {% if user.is_authenticated %}
+                                            {{wishlist.count}}
+                                            {% else  %}
+                                            0
+                                            {% endif %}
+                                        </span>
+                                    </a> -->
+                                    <a href="{% url 'wishlist'  %}">
+                                        <img class="svgInject" alt="Nest"
+                                            src="{% static 'assets/imgs/theme/icons/icon-heart.svg' %}" />
+                                        <span class="pro-count blue">
+                                            {% if user.is_authenticated %}
+                                            {{wishlist.count}}
+                                            {% else %}
+                                            0
+                                            {% endif %}
+                                        </span>
+                                    </a>
+                                    <a href="{% url 'wishlist'  %}"><span class="lable">Wishlist</span></a>
+                                </div>
+                                <div class="header-action-icon-2" window.location.reload()>
+                                    <a class="mini-cart-icon" href="{% url 'cart'  %}">
+                                        <i class="fi-rs-shopping-bag blue"
+                                            style="font-size: 22px; font-weight: 500 !important; "></i> <span
+                                            class="pro-count blue cart-items-count ">{{request.session.cart_data_obj|length}}</span>
+                                        <!-- <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart.svg' %}" /> -->
+                                        <!-- {{-->
+
+                                    </a>
+                                    <a href="shop-cart.html"><span class="lable">Cart</span></a>
+                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
+                                        <ul>
+                                            {% if cart_data.items %}
+                                            {% for product_id , item in cart_data.items %}
+                                            <li>
+                                                <div class="shopping-cart-img">
+                                                    <a href="shop-product-right.html"><img alt="Nest"
+                                                            src="{{item.image}}" /></a>
+                                                </div>
+                                                <div class="shopping-cart-title">
+                                                    <h4><a href="shop-product-right.html">{{item.title}}</a></h4>
+                                                    <h4><span>{{item.qty}} × </span>{{item.price}} </h4>
+                                                </div>
+                                                <div class="shopping-cart-delete">
+                                                    <a class="delete-product" data-product="{{product_id}}"><i
+                                                            class="fi-rs-cross-small"></i></a>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                            {% else %}
+                                            <center>
+                                                <h5>any cart items fount yet</h5>
+                                            </center>
+                                            {% endif %}
+
+                                        </ul>
+                                        <div class="shopping-cart-footer">
+                                            <div class="shopping-cart-total">
+                                                <h4>Total <span>$ {{cart_total_amount}} </span></h4>
+                                            </div>
+                                            <div class="shopping-cart-button">
+                                                <a href="{% url 'cart'  %}" class="outline">View cart</a>
+                                                <a href="{% url 'checkout'  %}">Checkout</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="header-action-icon-2">
+                                    <a href="{% url 'costumer-dashboard'  %}">
+                                        <img class="svgInject" alt="Notification" sizes="50"
+                                            src="{% static 'assets/images/icons/notifications.svg' %}" />
+                                        <span class="pro-count blue">
+                                            {{notif_count}} 
+                                         
+                                        </span>
+                                    </a>
+                                    <a href="{% url 'costumer-dashboard'  %}"><span
+                                            class="lable ml-0">Notifications</span></a>
+                                    <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                                   
+{{notifications_unread}}
+                                        <ul>
+                                          {% if user.is_authenticated %}
+                                         {% if notif %}
+                                         {% for notification in notif %}
+                                         <li class=" {% if notification.unread %} unread {% else %}  read {% endif %} ">{{notification.actor}} {{ notification.verb}} {% if action_object %}
+                                           {{notification.action_object}}
+                                         {% endif %} </li>
+                                         <small>{{notification.timestamp}} </small>
+                                       
+                                       {% endfor %}
+                                       {% else  %}
+                                       <p>Empty Notifications</p>
+                                         {% endif %}
+                                   
+                                          {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="header-action-icon-2">
+                                    <a href="{% url 'costumer-dashboard'  %}">
+                                        <img class="svgInject" alt="Nest"
+                                            src="{% static 'assets/imgs/theme/icons/icon-user.svg' %}" />
+                                    </a>
+                                    <a href="{% url 'costumer-dashboard'  %}"><span class="lable ml-0">{% if user.is_authenticated %} {{user.username}} {% else %} User {% endif %}</span></a>
+                                    <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                                        {% if user.is_authenticated %}
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'costumer-dashboard'  %}"><i
+                                                        class="fi fi-rs-user mr-10"></i>My Account</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'costumer-dashboard'  %}"><i
+                                                        class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'costumer-dashboard'  %}"><i
+                                                        class="fi fi-rs-label mr-10"></i>My
+                                                    Voucher</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'wishlist'  %}"><i class="fi fi-rs-heart mr-10"></i>My
+                                                    Wishlist</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'costumer-dashboard'  %}"><i
+                                                        class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'sign-out'  %}"><i
+                                                        class="User fi fi-rs-sign-out mr-10"></i>Sign out</a>
+                                            </li>
+                                        </ul>
+                                        {% else %}
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'sign-in'  %}"><i
+                                                        class="fi fi-rs-sign-in mr-10"></i>Sign in</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'sign-up'  %}"><i
+                                                        class="fi fi-rs-register mr-10"></i>Sign up</a>
+                                            </li>
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom header-bottom-bg-color sticky-bar">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="header-action-icon-2 d-block d-lg-none">
+                        <div class="burger-icon burger-icon-white">
+                            <span class="burger-icon-top" style="height: 2px !important;"></span>
+                            <span class="burger-icon-mid" style="height: 2px !important;"></span>
+                            <span class="burger-icon-bottom" style="height: 2px !important;"></span>
+                        </div>
+                    </div>
+                    <!-- <div class="header-action-icon-2 d-block d-lg-none">
+                        <i class="fa fa fa-ellipsis-v"></i>
+                    </div> -->
+                    <div class="logo logo-width-1 d-block d-lg-none">
+                        <a href="index.html"><img src="{% static 'assets/imgs/theme/logo.svg' %}" alt="logo"></a>
+                    </div>
+                    <div class="header-nav d-none d-lg-flex">
+                        <div class="main-categori-wrap d-none d-lg-block">
+                            <a class="categories-button-active " style="width: max-content;" href="#">
+                                <span class="fi-rs-apps"></span><span class="et">Browse</span> All Categories
+                                <i class="fi-rs-angle-down"></i>
+                            </a>
+                            <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
+                                <div>
+                                    <ul class='row'>
+                                        {% for category in categories %}
+                                        <li><a href="{% url 'category-product-list' category.cid  %}"><img
+                                                    src="{{category.image.url}}" alt="">{{category.title}}</a></li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+                                <div class="more_categories"> <span class="icon"></span> <span class="heading-sm-1">Show
+                                        more...</span></div>
+                            </div>
+                        </div>
+                        <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
+                            <nav>
+                                <ul style="width: max-content;">
+                                    <li class="hot-deals"><img src="{% static 'assets/imgs/theme/icons/icon-hot.svg' %}"
+                                            alt="hot deals"><a href="shop-grid-right.html">Hot Deals</a></li>
+                                    <li><a class="active" href="{% url 'Home'  %}">Home
+                                            <!--  <i class="fi-rs-angle-down"></i> --></a>
+                                        <!--   <ul class="sub-menu">
+                                            <li><a href="index.html">Home 1</a></li>
+                                            <li><a href="index-2.html">Home 2</a></li>
+                                            <li><a href="index-3.html">Home 3</a></li>
+                                            <li><a href="index-4.html">Home 4</a></li>
+                                        </ul> -->
+                                    </li>
+                                    <li><a class="active" href="{% url 'category-list'  %}">Category <i
+                                                class="fi-rs-angle-down"></i></a>
+                                        <ul class="sub-menu">
+                                            <li><a href="{% url 'category-list'  %}">All categories</a></li>
+                                            {% for category in categories %}
+                                            <li><a href="{% url 'category-product-list' category.cid  %}">{{category.title}}
+                                                </a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'product-list'  %}">Shop</a>
+                                    </li>
+                                    <li><a href="{% url 'service'  %}">Services </a>
+                                    </li>
+                                    <li class="position-static"><a href="#">Mega menu <i
+                                                class="fi-rs-angle-down"></i></a>
+                                        <ul class="mega-menu row">
+                                            <div class="col-md-9" style="    display: flex;
+                                            flex-wrap: wrap;
+                                            gap: 37px;">
+                                                {% for departement in departement %}
+                                                <li class="sub-mega-menu sub-mega-menu-width-22">
+                                                    <a class="menu-title"> {{departement.title}} </a>
+                                                    <ul>
+                                                        {% for cat in departement.categories.all %}
+                                                        <li><a href="{% url 'category-product-list' cat.cid  %}">
+                                                                {{cat.title}}</a></li>
+                                                        {% endfor %}
+
+                                                    </ul>
+                                                </li>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col-md-3" style="justify-content: end;
+                                           display: flex;
+                                           margin: 0px;
+                                           padding: 0px;">
+                                                <li class="sub-mega-menu sub-mega-menu-width-34" style="
+                                            width: max-content;">
+                                                    <div class="menu-banner-wrap">
+                                                        <a href="shop-product-right.html"><img
+                                                                src="{% static 'assets/imgs/banner/banner-menu.png' %}"
+                                                                alt="Nest"></a>
+                                                        <div class="menu-banner-content">
+                                                            <h4>Hot deals</h4>
+                                                            <h3>Don't miss<br> Trending</h3>
+                                                            <div class="menu-banner-price">
+                                                                <span class="new-price text-success">Save to 50%</span>
+                                                            </div>
+                                                            <div class="menu-banner-btn">
+                                                                <a href="shop-product-right.html">Shop now</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu-banner-discount">
+                                                            <h3>
+                                                                <span>25%</span>
+                                                                off
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'vendor-list' %}">Sellers</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'about'  %}">About</a>
+                                    </li>
+                                    <!--  <li><a href="#">Pages <i class="fi-rs-angle-down"></i></a>
+                                        <ul class="sub-menu">
+                                            <li><a href="page-about.html">About Us</a></li>
+                                            <li><a href="page-contact.html">Contact</a></li>
+                                            <li><a href="{% url 'costumer-dashboard'  %}">My Account</a></li>
+                                            <li><a href="page-login.html">Login</a></li>
+                                            <li><a href="page-register.html">Register</a></li>
+                                            <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
+                                            <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
+                                            <li><a href="page-terms.html">Terms of Service</a></li>
+                                            <li><a href="page-404.html">404 Page</a></li>
+                                        </ul>
+                                    </li> -->
+                                    <li>
+                                        <a href="{% url 'contact'  %}">Contact</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="hotline d-none d-lg-flex">
+                        <img src="{% static 'assets/imgs/theme/icons/icon-headphone.svg' %}" alt="hotline">
+                        <p>1900 - 888<span>24/7 Support Center</span></p>
+                    </div>
+                </div>
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible">
+                <strong>{{message}}</strong>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <script>
+                setTimeout(() => {
+                    $('.alert').alert('close')
+                }, 3080)
+            </script>
+        </div>
+    </header>
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a href="index.html"><img src="{% static 'assets/imgs/theme/logo.svg' %}" alt="logo"></a>
+                </div>
+                <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-header-content-area">
+                <div class="mobile-search search-style-3 mobile-header-border">
+                    <form action="{% url 'search' %}" method="GET">
+                        <select name="category" class="dropdown">
+                            <option value="all">All Categories</option>
+                            {% for category in categories %}
+                            <option value="{{category.title}}">{{category.title}}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="type" class="dropdown">
+                            <option value="product">products</option>
+                            <option value="service">services</option>
+                        </select>
+
+                        <input type="text" placeholder="Search for items…" name="q">
+                        <button type="submit"><i class="fi-rs-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="mobile-menu-wrap mobile-header-border">
+                    <!-- mobile menu start -->
+                    <nav>
+                        <ul class="mobile-menu font-heading">
+                            <li class="menu-item-has-children"><a href="index.html">Home</a>
+                            </li>
+                            <li class="menu-item-has-children"><a href="shop-grid-right.html">shop</a>
+                            </li>
+                            <li class="menu-item-has-children"><a href="#">Mega menu</a>
+                                <ul class="dropdown">
+                                    <li class="menu-item-has-children"><a href="#">Women's Fashion</a>
+                                        <ul class="dropdown">
+                                            <li><a href="shop-product-right.html">Dresses</a></li>
+                                            <li><a href="shop-product-right.html">Blouses & Shirts</a></li>
+                                            <li><a href="shop-product-right.html">Hoodies & Sweatshirts</a></li>
+                                            <li><a href="shop-product-right.html">Women's Sets</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="menu-item-has-children"><a href="#">Men's Fashion</a>
+                                        <ul class="dropdown">
+                                            <li><a href="shop-product-right.html">Jackets</a></li>
+                                            <li><a href="shop-product-right.html">Casual Faux Leather</a></li>
+                                            <li><a href="shop-product-right.html">Genuine Leather</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="menu-item-has-children"><a href="#">Technology</a>
+                                        <ul class="dropdown">
+                                            <li><a href="shop-product-right.html">Gaming Laptops</a></li>
+                                            <li><a href="shop-product-right.html">Ultraslim Laptops</a></li>
+                                            <li><a href="shop-product-right.html">Tablets</a></li>
+                                            <li><a href="shop-product-right.html">Laptop Accessories</a></li>
+                                            <li><a href="shop-product-right.html">Tablet Accessories</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-item-has-children"><a href="blog-category-fullwidth.html">Blog</a>
+                            </li>
+                            <li class="menu-item-has-children"><a href="#">Pages</a>
+                            </li>
+                            <ul>
+
+                                <li>
+                                    <div class="" style="border-radius: 0px !important;">
+                                        <form action="{% url 'selectlanguage'  %}" method="post"
+                                            style="border-radius: 0px !important;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="text" value="{{ redirect_to }}">
+                                <li>
+                                    <select class="" onchange="submit()"
+                                        style="border-radius: 0px !important; padding: 7px 0;font-size: 13px; line-height: 1;"
+                                        id="" name="language">
+                                        {% get_current_language as LANGUAGE_CODE %}
+                                        {% get_available_languages as LANGUAGES %}
+                                        {% get_language_info_list for LANGUAGES as languages %}
+
+                                        {% for language in languages %}
+                                        <option value="{{language.code}}" {% if language.code == LANGUAGE_CODE %} selected
+                                            {% endif %}>{{language.name_local}} ({{language.code}}) </option>
+
+                                        {% endfor %}
+
+                                    </select>
+                                    <noscript>
+                                        <input type="submit" value="Set">
+                                    </noscript>
+                                </li>
+                                </form>
+                        </div>
+                        </li>
+
+                        <li>
+                            <div style="border-radius: 0px !important;">
+                                <form action="{% url 'selectcurrency' %}" method="post" id="currency_switcher"
+                                    style="border-radius: 0px !important;">
+                                    {% csrf_token %}
+                                    <select name="currency"
+                                        onchange="document.getElementById('currency_switcher').submit()"
+                                        style="border-radius: 0px !important; padding: 7px 0; font-size: 13px; line-height: 1;">
+                                        {% for currency in CURRENCIES %}
+                                        <option value="{{ currency.code }}" {% if currency.code == request.session.currency %} selected='selected' {% endif %}>
+                                            {{ currency.symbol }} {{ currency.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <noscript>
+                                        <input type="submit" value="Set">
+                                    </noscript>
+                                </form>
+
+                            </div>
+                        </li>
+                            </ul>
+                        </ul>
+                    </nav>
+                    <div class="col-lg-1-5 primary-sidebar sticky-sidebar pt-30">
+                        <div class="sidebar-widget widget-category-2 mb-30">
+                            <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
+                            <ul>
+                                {% for category in categories %}
+                                <li><a href="{% url 'category-product-list' category.cid  %}"> <img
+                                            src="{{category.image.url}}" alt="" width="50"
+                                            height="30">{{category.title}}</a><span
+                                        class="count">{{category.category.count}}</span></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- Fillter By Price -->
+                        <!-- Product sidebar Widget -->
+                    </div>
+                    <!-- mobile menu end -->
+                </div>
+                <div class="mobile-header-info-wrap">
+                    <div class="single-mobile-header-info">
+                        <a href=""><i class="fi-rs-marker"></i> Our location </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'sign-out'  %}"><i class="fi-rs-user"></i>Log out</a>
+                        {% else %}
+                        <a href="{% url 'sign-in'  %}"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                        {% endif %}
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="#"><i class="fi-rs-headphones"></i>(+228) 00-00-00-00</a>
+                    </div>
+                </div>
+                <div class="mobile-social-icon mb-50">
+                    <h6 class="mb-15">Follow Us</h6>
+                    <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-facebook-white.svg' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-twitter-white.svg' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-instagram-white.svg' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-pinterest-white.svg' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-youtube-white.svg' %}" alt=""></a>
+                </div>
+                <div class="site-copyright"> Copyright 2021 © Nest. All rights reserved. Powered by AliThemes.</div>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-bottom-navigation">
+        <!-- <div>
+            <center>
+                <div class="header-action-icon-2 d-block">
+                    <div class="burger-icon burger-icon-white">
+                        <i class="fa fa-align-justify"></i>
+                    </div>
+                </div>
+            </center>
+            <center><span class="pro-count">Cart</span></center>
+
+
+        </div> -->
+        <div class="header-action-icon-2">
+            <a href="{% url 'cart'  %}">
+                <center>
+                    <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart.svg' %}">
+                    <sup class="pro-count blue cart-items-count ">{{ request.session.cart_data_obj|length}}</sup>
+                </center>
+                <center><span class="pro-count">Cart</span></center>
+            </a>
+        </div>
+        <div class="header-action-icon-2">
+            <a href="{% url 'Home'  %}">
+                <center>
+                    <i class="fi-rs-home" style="font-weight: 700;font-size: 22px;"></i>
+                </center>
+                <center><span class="pro-count">Home</span></center>
+
+            </a>
+        </div>
+        <div class="header-action-icon-2">
+            <a href="{% url 'product-list'  %}">
+                <center> <i class="fa fa-map-o" style="font-weight: 700;font-size: 22px;"></i></center>
+                <center><span class="pro-count">shop</span></center>
+            </a>
+        </div>
+        <div class="header-action-icon-2">
+            <a href="{% url 'wishlist'  %}">
+                <center> <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-heart.svg' %}">
+                    <sup class="pro-count blue">{{wishlist.count}}</sup>
+                </center>
+                <center><span class="pro-count">favorites</span></center>
+
+            </a>
+        </div>
+        <div class="header-action-icon-2">
+            <a href="{% url 'costumer-dashboard'  %}">
+                <center> <i class="fi-rs-user" style="font-weight: 700;font-size: 22px;"></i>
+                    <sup class="pro-count blue"></sup>
+                </center>
+                <center><span class="pro-count">{{request.user.username}}</span></center>
+            </a>
+        </div>
+
+
+    </div>
+    <!--End header-->
+    {% block 'content' %}
+
+    {% endblock %}
+    {% for product in products %}
+    <div class="modal fade custom-modal" id="quickViewModal-{{product.pid}}" tabindex="-1"
+        aria-labelledby="quickViewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-xs-12 mb-md-0 mb-sm-5">
+                            <div class="detail-gallery">
+                                <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                <!-- MAIN SLIDES -->
+                                <div class="product-image-slider">
+                                    <figure class="border-radius-10">
+                                        <img src="{{product.image.url}}" alt="product image" />
+                                    </figure>
+                                    {% for product in product_image %}
+                                    <figure class="border-radius-10">
+                                        <img src="{{product.images.url}}" alt="product image" />
+                                    </figure>
+                                    {% endfor %}
+                                </div>
+                                <!-- THUMBNAILS -->
+                                <div class="slider-nav-thumbnails">
+                                    <div><img src="{{product.image.url}}" alt="product image" /></div>
+                                    {% for producti in product_image %}
+                                    <div><img src="{{producti.images.url}}" alt="product image" /></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <!-- End Gallery -->
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="detail-info pr-30 pl-30">
+                                <span class="stock-status out-stock"> - {{product.get_percentage|floatformat}} %</span>
+                                <h3 class="title-detail"><a href="{% url 'product-detail' product.pid  %}"
+                                        class="text-heading"> {{product.title}} </a></h3>
+                                <div class="product-detail-rating">
+                                    <div class="product-rate-cover">
+                                        <div class="rating-star">
+                                            <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}"
+                                                aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and poduct.averageReview < 2 %}-half-o {% endif %}"
+                                                aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}"
+                                                aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}"
+                                                aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}"
+                                                aria-hidden="true"></i>
+                                            <span>
+                                                <h6>{{product.countReview}} reviews</h6>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix product-price-cover">
+                                    <div class="product-price primary-color float-left">
+                                        <span
+                                            class="current-product-price-{{product.id}}">{{product.price|currency:request.session.currency}}
+                                            {{request.session.currency}}</span>
+                                        <span>
+                                            <span
+                                                class="save-price font-md color3 ml-15">{{product.get_percentage|floatformat}}%
+                                                Off</span>
+                                            <span
+                                                class="old-price font-md ml-15">{{product.old_price|currency:request.session.currency}}
+                                                {{request.session.currency}}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="detail-extralink mb-50">
+                                    <div class="detail-qty border radius">
+                                        <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                        <span class="qty-val">1</span>
+                                        <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                    </div>
+                                    <!-- <div class="detail-qty border radius">
+                                 //       < <input type="hidden"  class="product-id-{{product.id}}" value="{{ product.id }}">
+                                        <a href="" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                        <span class="qty-val" >1</span>
+                                        <a href="" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                    </div> -->
+                                    <div class="product-extra-link2 form-group">
+                                        <!-- <input type="hidden" value="{{product.id}}" class="product-id">
+                                        <input type="hidden" value="{{product.title}}" class="product-title"> -->
+                                        <!-- <button type="submit" class="button button-add-to-cart"></button> -->
+                                        <!-- <input type="number" value="1" class="border"  id="product-quantity" min="1" style="width:50px; height: 50px;"> -->
+                                        <!-- <input type="hidden" value="1" id="product-quantity" class="detail-qty product-quantity-{{product.id}}"> -->
+                                        <input type="hidden" class="product-pid-{{product.id}}"
+                                            value="{{product.pid}} ">
+                                        <input type="hidden" class="product-image-{{product.id}}"
+                                            value="{{ product.image.url }}">
+                                        <input type="hidden" class="product-vendor-{{product.id}}"
+                                            value="{{ product.vendor.title }}">
+                                        <input type="hidden" class="product-id-{{product.id}}" value="{{ product.id }}">
+                                        <input type="hidden" class="product-title-{{product.id}}"
+                                            value="{{ product.title}}">
+                                        <a aria-label="Add To Cart" class="add add-to-cart-btn b-0 action-btn hover-up "
+                                            data-index="{{product.id}}" id="add-to-cart-btn"><i
+                                                class="fi-rs-shopping-cart mr-5"></i></a>
+                                        <!-- <a  class="button-add-to-cart" id="add-to-cart-btn"><i class="fi-rs-shopping-cart"></i></a> -->
+                                        <a aria-label="Add To Wishlist" class="action-btn data-to-wishlist"
+                                            data-product-item="{{product.id}}"><i class="fi-rs-heart"></i></a>
+                                        <!-- <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a> -->
+                                        <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                    </div>
+                                </div>
+                                <div class="font-xs">
+                                    <ul class="mr-50 float-start">
+                                        <li class="mb-5">Type: <span class="text-brand">{{product.type}}</span></li>
+                                        <li class="mb-5">MFG:<span class="text-brand">{{product.mfb|date:' d M,
+                                                Y'}}</span></li>
+                                        <li>LIFE: <span class="text-brand">70 days</span></li>
+                                    </ul>
+                                    <ul class="float-start">
+                                        {% if product.sku %}
+                                        <li class="mb-5">SKU: <a href="#">{{product.sku}}</a></li>
+                                        {% endif %}
+                                        {% if product.tags.all %}
+                                        <li class="mb-5">
+                                            Tags: {% for tag in product.tags.all %}
+                                            <a href="{% url 'tags' tag.slug  %}" rel="tag" style="margin: 0px 2px;">
+                                                #{{tag.name}} , </a>
+                                            {% endfor %}
+                                        </li>
+                                        {% endif %}
+
+
+                                        <li>Stock:<span class="in-stock text-brand ml-5">{{product.stock_count}}
+                                                Item{{product.stock_count|pluralize}} In Stock</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Detail Info -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <footer class="main">
+        <section class="newsletter wow fadeIn animated mb-15">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="position-relative newsletter-inner">
+                            <div class="newsletter-content">
+                                <h2 class="mb-20">Stay home & get your daily <br> needs from our shop</h2>
+                                <p class="mb-45">Start You'r Daily Shopping with <span class="text-brand">Nest
+                                        Mart</span></p>
+                                <form class="form-subcriber d-flex">
+                                    <input type="email" placeholder="Your emaill address">
+                                    <button class="btn" type="submit">Subscribe</button>
+                                </form>
+                            </div>
+                            <img src="{% static 'assets/imgs/banner/banner-9.png' %}" alt="newsletter">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="featured wow fadeIn animated section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-1-5 col-md-4 col-6 col-sm-6 mb-md-4 mb-xl-0">
+                        <div class="banner-left-icon d-flex align-items-center wow fadeIn  animated">
+                            <div class="banner-icon">
+                                <img src="{% static 'assets/imgs/theme/icons/icon-1.svg' %}" alt="">
+                            </div>
+                            <div class="banner-text">
+                                <h3 class="icon-box-title">Best prices & offers</h3>
+                                <p>Orders $50 or more</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1-5 col-md-4 col-6 col-sm-6">
+                        <div class="banner-left-icon d-flex align-items-center wow fadeIn  animated">
+                            <div class="banner-icon">
+                                <img src="{% static 'assets/imgs/theme/icons/icon-2.svg' %}" alt="">
+                            </div>
+                            <div class="banner-text">
+                                <h3 class="icon-box-title">Free delivery</h3>
+                                <p>24/7 amazing services</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1-5 col-md-4 col-6 col-sm-6">
+                        <div class="banner-left-icon d-flex align-items-center wow fadeIn  animated">
+                            <div class="banner-icon">
+                                <img src="{% static 'assets/imgs/theme/icons/icon-3.svg' %}" alt="">
+                            </div>
+                            <div class="banner-text">
+                                <h3 class="icon-box-title">Great daily deal</h3>
+                                <p>When you sign up</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1-5 col-md-4 col-6 col-sm-6">
+                        <div class="banner-left-icon d-flex align-items-center wow fadeIn  animated">
+                            <div class="banner-icon">
+                                <img src="{% static 'assets/imgs/theme/icons/icon-4.svg' %}" alt="">
+                            </div>
+                            <div class="banner-text">
+                                <h3 class="icon-box-title">Wide assortment</h3>
+                                <p>Mega Discounts</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1-5 col-md-4 col-6 col-sm-6">
+                        <div class="banner-left-icon d-flex align-items-center wow fadeIn  animated">
+                            <div class="banner-icon">
+                                <img src="{% static 'assets/imgs/theme/icons/icon-5.svg' %}" alt="">
+                            </div>
+                            <div class="banner-text">
+                                <h3 class="icon-box-title">Easy returns</h3>
+                                <p>Within 30 days</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1-5 col-md-4 col-6 col-sm-6 d-xl-none">
+                        <div class="banner-left-icon d-flex align-items-center wow fadeIn  animated">
+                            <div class="banner-icon">
+                                <img src="{% static 'assets/imgs/theme/icons/icon-6.svg' %}" alt="">
+                            </div>
+                            <div class="banner-text">
+                                <h3 class="icon-box-title">Safe delivery</h3>
+                                <p>Within 30 days</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col">
+                        <div class="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0">
+                            <div class="logo wow fadeIn animated mb-30">
+                                <a href="index.html" class="mb-15"><img src="{% static 'assets/imgs/theme/logo.svg' %}"
+                                        alt="logo" style="visibility: visible;"></a>
+                                <p class="font-lg text-heading">Awesome grocery store website template</p>
+                            </div>
+                            <ul class="contact-infor">
+                                <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}"
+                                        alt=""><strong>Address: </strong> <span>5171 W Campbell Ave undefined Kent, Utah
+                                        53127 United States</span></li>
+                                <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}"
+                                        alt=""><strong>Call Us:</strong><span>(+91) - 540-025-124553</span></li>
+                                <li><img src="{% static 'assets/imgs/theme/icons/icon-email-2.svg' %}"
+                                        alt=""><strong>Email:</strong><span><a
+                                            href="https://demosc.chinaz.net/cdn-cgi/l/email-protection"
+                                            class="__cf_email__"
+                                            data-cfemail="1261737e77525c7761663c717d7f">[email&#160;protected]</a></span>
+                                </li>
+                                <li><img src="{% static 'assets/imgs/theme/icons/icon-clock.svg' %}"
+                                        alt=""><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-link-widget col" style="visibility: visible;">
+                        <h4 class="widget-title wow fadeIn animated" style="visibility: visible;">Company</h4>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="{% url 'about'  %}">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="{% url 'contact'  %}">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-widget col">
+                        <h4 class="widget-title wow fadeIn animated">Account</h4>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="{% url 'sign-in'  %}">Sign In</a></li>
+                            <li><a href="{% url 'cart'  %}">View Cart</a></li>
+                            <li><a href="{% url 'wishlist'  %}">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help Ticket</a></li>
+                            <li><a href="#">Shipping Details</a></li>
+                            <li><a href="#">Compare products</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-widget col">
+                        <h4 class="widget-title wow fadeIn animated">Corporate</h4>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">Become a Vendor</a></li>
+                            <li><a href="#">Affiliate Program</a></li>
+                            <li><a href="#">Farm Business</a></li>
+                            <li><a href="#">Farm Careers</a></li>
+                            <li><a href="#">Our Suppliers</a></li>
+                            <li><a href="#">Accessibility</a></li>
+                            <li><a href="#">Promotions</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-widget col">
+                        <h4 class="widget-title wow fadeIn animated">Popular</h4>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">Milk & Flavoured Milk</a></li>
+                            <li><a href="#">Butter and Margarine</a></li>
+                            <li><a href="#">Eggs Substitutes</a></li>
+                            <li><a href="#">Marmalades</a></li>
+                            <li><a href="#">Sour Cream and Dips</a></li>
+                            <li><a href="#">Tea & Kombucha</a></li>
+                            <li><a href="#">Cheese</a></li>
+                        </ul>
+                    </div>
+                    <!--                     <div class="footer-link-widget widget-install-app col">
+                        <h4 class="widget-title wow fadeIn animated">Install App</h4>
+                        <p class="wow fadeIn animated">From App Store or Google Play</p>
+                        <div class="download-app wow fadeIn animated">
+                            <a href="#" class="hover-up mb-sm-2 mb-lg-0"><img class="active" src="{% static 'assets/imgs/theme/app-store.jpg' %}" alt=""></a>
+                            <a href="#" class="hover-up mb-sm-2"><img src="{% static 'assets/imgs/theme/google-play.jpg' %}" alt=""></a>
+                        </div>
+                        <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                        <img class="wow fadeIn animated" src="{% static 'assets/imgs/theme/payment-method.png' %}" alt="">
+                    </div> -->
+                </div>
+            </div>
+        </section>
+        <!--         <div class="container pb-30 wow fadeIn animated">
+            <div class="row align-items-center">
+                <div class="col-12 mb-30">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <p class="font-sm mb-0">Copyright &copy; 2021.Company name All rights reserved.<a target="_blank" href="https://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+                </div>
+                <div class="col-xl-4  col-lg-6 text-center d-none d-xl-block">
+                    <div class="hotline d-lg-inline-flex mr-30">
+                        <img src="{% static 'assets/imgs/theme/icons/phone-call.svg' %}" alt="hotline">
+                        <p>1900 - 6666<span>Working 8:00 - 22:00</span></p>
+                    </div>
+                    <div class="hotline d-lg-inline-flex">
+                        <img src="{% static 'assets/imgs/theme/icons/phone-call.svg' %}" alt="hotline">
+                        <p>1900 - 8888<span>24/7 Support Center</span></p>
+                    </div>
+                </div>
+                <div class="col-xl-4  col-lg-6  col-md-6 text-end d-none d-md-block">
+                    <div class="mobile-social-icon">
+                        <h6>Follow Us </h6>
+                        <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-facebook-white.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-twitter-white.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-instagram-white.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-pinterest-white.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'assets/imgs/theme/icons/icon-youtube-white.svg' %}" alt=""></a>
+                    </div>
+                    <p class="font-sm">Up to 15% discount on your first subscribe</p>
+                </div>
+            </div>
+        </div> -->
+    </footer>
+    <!-- Preloader Start -->
+    <!--     <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <img src="{% static 'assets/imgs/theme/loading.gif' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Vendor JS-->
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+    <script src="{% static 'assets/js/vendor/modernizr-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-3.6.0.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'assets/js/vendor/jquery-migrate-3.3.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/slick.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.syotimer.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/wow.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery-ui.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/magnific-popup.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/select2.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/waypoints.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/counterup.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.countdown.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/images-loaded.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/isotope.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/scrollup.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.vticker-min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.theia.sticky.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.elevatezoom.js' %}"></script>
+    <!-- Template  JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/shop.js' %}"></script>
+    <script src="{% static 'assets/js/function.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+        integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=" crossorigin="anonymous"></script>
+
+    <!-- Font awesome 5 -->
+</body>
+
+
+</html>
+<script>
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Now, call the reverse geocoding API with these coordinates
+            getReverseGeocodeData(latitude, longitude);
+        });
+    } else {
+        console.log("Geolocation is not available in this browser.");
+    }
+
+    function getReverseGeocodeData(latitude, longitude) {
+        const apiKey = "fbd12cdc228c457f9c876e5a7ddc493d"; // Remplacez par votre clé API OpenCage Geocoder
+        const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const results = data.results[0];
+                const country = results.components.country || "N/A";
+                const state = results.components.state || "N/A";
+                const city = results.components.city || "N/A";
+
+                // Obtenez l'élément select par son ID
+                const locationSelect = document.getElementById("location-select");
+
+                // Créez et ajoutez les options au select
+                const countryOption = new Option(`Country: ${country}`, "country");
+                const stateOption = new Option(`State: ${state}`, "state");
+                const cityOption = new Option(`City: ${city}`, "city");
+
+                locationSelect.appendChild(countryOption);
+                countryOption.disabled = true;
+                locationSelect.appendChild(stateOption);
+                stateOption.disabled = true;
+                locationSelect.appendChild(cityOption);
+                cityOption.disabled = true;
+
+            })
+            .catch(error => {
+                const no_location = new Option("Location not found");
+
+                locationSelect.appendChild(no_location);
+                countryOption.disabled = true;
+                console.error("Error fetching geocoding data:", error);
+            });
+    }
+
+    // function getReverseGeocodeData(latitude, longitude) {
+    //     const apiKey = "fbd12cdc228c457f9c876e5a7ddc493d"; // Replace with your OpenCage Geocoder API key
+    //     const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+
+    //     fetch(apiUrl)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // Extract the relevant location information
+    //             const results = data.results[0];
+    //             const country = results.components.country;
+    //             const state = results.components.state;
+    //             const city = results.components.city;
+
+    //             // Now you can use the country, state, and city information as needed
+    //             console.log(`Country: ${country}`);
+    //             console.log(`State: ${state}`);
+    //             console.log(`City: ${city}`);
+    //             const locationInfoElement = document.getElementById("location-info");
+
+
+    //             // Mettez à jour le contenu de l'élément avec les informations de géolocalisation
+    //             locationInfoElement.textContent = `Country: ${country}, State: ${state}, City: ${city}`;
+    //         })
+    //         .catch(error => {
+    //             console.error("Error fetching geocoding data:", error);
+    //         });
+    // }
+    function uploadImage() {
+        // Cliquez sur le bouton de téléchargement de fichier caché
+        document.getElementById('imageUpload').click();
+    }
+
+    locationapi = document.getElementsByClassName('select2-results__option')
+    console.log(locationapi)
+</script>

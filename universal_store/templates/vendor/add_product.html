@@ -1,0 +1,225 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<style>
+    .delete-button{
+        border: 0;
+    background: indianred;
+    padding: 5px;
+    border-radius: 12px;
+    position: relative;
+    top: -88px;
+    right: 23px;
+    }
+</style>
+<section class="content-main">
+    <form action="{% url 'add-product'  %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic information</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Product title<span class="required">*</span></label>
+                            <input type="text" placeholder="sac a dos" required name="product_title"
+                                class="form-control" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description</label>
+                            <textarea class=" tinymce-editor form-control" name="product_desc" rows="4" cols="35"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full specification</label>
+                            <textarea class=" tinymce-editor form-control" name="product_spec" rows="4" cols="35"></textarea>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Regular price</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="800" type="text" name="product_old_price"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Promotional price</label>
+                                    <input placeholder="700" type="text" name="product_price " class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Product devise</label>
+                                    <div class="row gx-2">
+                                        <input value="{{request.session.currency}}" class="form-control"
+                                            style="background-color: white; border: 0px transparent;" disabled
+                                            onclick="alert('vous ne pouver pas changer la devise ici ')" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Product Models</h4>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-4">
+                                        <label class="form-label">Width</label>
+                                        <input type="text" name="width" placeholder="" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-4">
+                                        <label class="form-label">Height</label>
+                                        <input type="text" name="height" placeholder="inch" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 row">
+                                    <div class="mb-4 col-3">
+                                        <label class="form-label">Color</label>
+                                        <input type="color" name="color" class="form-control"
+                                            style="width: 50px;padding: 5px;margin: 0px;" />
+                                    </div>
+
+                                    <div class="mb-4 col-8">
+                                        <label class="form-label">Color title</label>
+                                        <input type="text" name="color_title" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-4">
+                                        <label class="form-label">Size</label>
+                                        <input type="text" name="size" placeholder="inch" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Weight</label>
+                                <input type="text" name="Weight" placeholder="gam" class="form-control" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- card end// -->
+            </div>
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Principal image<span class="required">*</span></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-upload">
+                            <div id="preview-container" style="display: flex;flex-wrap: wrap; justify-content: center; align-items: center;">
+                                <ul id="fileList"></ul>
+                            </div>
+                            <input type="file" name="images" multiple id="imageUpload" style="display: none;" required class="form-control"
+                               onchange="previewImage(this)">
+                        </div>
+                    </div>
+                </div>
+             <!-- <button onclick="clearFiles()">Clear Files</button> -->
+               
+                   <center> <a id="scrollUp" class="btn btn-primary mb-5" onclick="uploadImage()"><i class="fa fa-cloud-upload" style="color: blue;"></i>Upload image</span></a></center>
+                <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>References</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-sm-12 mb-3">
+                                <label class="form-label">Category</label>
+                                <div class="custom_select col-sm-12">
+                                    <select class="form-select select-nice" name="category">
+                                        <option selected disabled>Product Category</option>
+                                        {% for category in categories %}
+                                        <option value="{{category.title}}">{{category.title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Tags</label>
+                                <input type="text" class="form-control" name='tag'
+                                    placeholder="separate it by a comma" />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Product Type</label>
+                                <input type="text" class="form-control" name='type' />
+                            </div>
+                            <!-- <label for="">Product life</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <label  class="form-label">Created at</label>
+                                <input type="date" class="form-control px-2" name='from' />
+                            </div>
+                            <div class="col-6">
+                                <label  class="form-label">exprire at</label>
+                                <input type="date" class="form-control px-2" name='to' />
+                            </div>
+                        </div> -->
+                        </div>
+                        <!-- row.// -->
+
+                    </div>
+
+                </div>
+                <!-- card end// -->
+                <div class="col-md-12">
+                    <button type="submit" class="bt form-control p-0 sbmit" name="submit" value="Submit">Create</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</section>
+<script>
+    const imageUpload = document.getElementById('imageUpload');
+    const fileList = document.getElementById('fileList');
+
+    imageUpload.addEventListener('change', function () {
+        for (const file of this.files) {
+            const listItem = document.createElement('span');
+            listItem.innerHTML = `
+              
+                    <img src="${URL.createObjectURL(file)}" width="100">
+                    <button onclick="removeFile(this)" class='delete-button' >X</button>
+               
+            `;
+            fileList.appendChild(listItem);
+        }
+    });
+
+    function removeFile(button) {
+        const listItem = button.closest('span');
+        listItem.remove();
+    }
+
+
+    // function clearFiles() {
+    //     imageUpload.value = ''; // Clear the selected files
+    //     fileList.innerHTML = ''; // Clear the list
+    // }
+</script>
+{% endblock %}

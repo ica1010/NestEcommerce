@@ -1,0 +1,524 @@
+{% load static %}
+{% load i18n %}
+{% load currency %}
+{% currency_context %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Nest Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <link href="{% static 'assets/fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/css/vendors/bootstrap.css
+    ' %}"></script>
+    <script href="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/imgs/theme/favicon.svg' %}">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/mainc619.css' %}">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg" />
+    <!-- Template CSS -->
+    <link href="{% static 'assets/css/vendorcss.css' %}" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://unpkg.com/material-icons@1.13.8/iconfont/material-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/4.0.0/font/MaterialIcons-Regular.ttf" rel="stylesheet">
+    <style>
+        .alert {
+            color: white;
+            border-radius: 0px;
+            box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.171)
+        }
+
+        .alert-error {
+            background-color: #ff2f19;
+        }
+
+        .alert-success {
+            background-color: green;
+        }
+
+        .alert-warning {
+            background-color: rgb(160, 150, 12);
+        }
+
+        .delete-button{
+            border: 0;
+        background: indianred;
+        padding: 5px;
+        border-radius: 12px;
+        position: relative;
+        top: -88px;
+        right: 23px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="{% url 'Home'  %}" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/logo.svg' %}" class="logo" alt="Nest Dashboard" />
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"><i
+                        class="text-muted material-icons md-menu_open"></i></button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item {% if request.path == '/dashboard/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'costumer-dashboard'  %}">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                    <hr>
+                </li>
+            </ul>
+            <ul class="menu-aside">
+                <label for="" style="padding: 0px 20px;font-weight: 800; margin-bottom: 15px;">Store Setting</label>
+                <li class="menu-item   {% if request.path == '/shop-profile/' %} active {% endif %} ">
+                    <a class="menu-link" href="{% url 'shop-profile'  %}">
+                        <i class="icon material-icons md-person"></i>
+                        <span class="text">My Shop</span>
+                    </a>
+                </li>
+                <li class="menu-item {% if request.path == '/seller/product/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'vendor-product'  %}">
+                        <i class="icon material-icons md-add_box"></i>
+                        <span class="text">My Products</span>
+                    </a>
+                </li>
+                <li class="menu-item {% if request.path == '/seller/service/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'vendor-service'  %}">
+                        <i class="icon material-icons md-add_box"></i>
+                        <span class="text">My Services</span>
+                    </a>
+                </li>
+                <!-- <li class="menu-item  {% if request.path == '/seller/change-shop-profile/' %} active {% endif %} ">
+                    <a class="menu-link" href="{% url 'shop-change-profile'  %}">
+                        <i class="icon material-icons md-person"></i>
+                        <span class="text">Change Shop informations</span>
+                    </a>
+                </li> 
+                <li class="menu-item  {% if request.path == '/add-product/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'add-product'  %}">
+                        <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>-->
+                <li class="menu-item  {% if request.path == '/seller-orders/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'seller-orders' %}">
+                        <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">My receved Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item   {% if request.path == '/transactions/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'transactions'  %}">
+                        <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Transactions</span>
+                    </a>
+                </li>
+                <hr />
+            </ul>
+            <ul class="menu-aside">
+                <label for="" style="padding: 0px 20px;font-weight: 800; margin-bottom: 15px;">Account Setting </label>
+                <li class="menu-item  {% if request.path == '/seller-profile/' %} active {% endif %} ">
+                    <a class="menu-link" href="{% url 'seller-profile'  %}">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Profile</span>
+                    </a>
+                </li>
+                <li class="menu-item {% if request.path == '/sended-orders/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'sended-orders'  %}">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">your orders</span>
+                    </a>
+                </li>
+                <li class="menu-item  {% if request.path == '/billing-address/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'billing-address'  %}">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">your billing adrress</span>
+                    </a>
+                </li>
+                <li class="menu-item {% if request.path == '/seller/change-profile/' %} active {% endif %}">
+                    <a class="menu-link" href="{% url 'seller-change-profile'  %}">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Change profile</span>
+                    </a>
+                    <hr>
+                </li>
+            </ul>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="{% url 'sign-out'  %}">
+                        <i class="icon material-icons md-settings"></i>
+                        <span class="">Logout</span>
+                    </a>
+                </li>
+            </ul>
+            <br />
+            <br />
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}} alert-dismissible" style="width: 100%;">
+                    <strong>{{message}}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <!-- <div class="search-style-2" style="width: 100%;">
+                    <form action="{% url 'search'  %}" method="GET" >
+                        <select class="select-active" name="category">
+                            <option value="all">All Categories</option>
+                            {% for category in categories %}
+                            <option value="{{category.title}}">{{category.title}}</option>
+                            {% endfor %}
+                        </select>
+                        <select class="select-active" name="type">
+                            <option value="product">products</option>
+                            <option value="service">services</option>
+                        </select>
+                        <input type="search" placeholder="Enter your product or service name..." name="q"
+                            style="width: 100%;">
+                        <a href="" type="submit">
+                            <button>
+                                <i class="fi-rs-search" style="font-weight: 700;font-size: 22px;"></i>
+                            </button>
+                        </a>
+                    </form>
+                </div> -->
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                        <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products"></option>
+                        <option value="New orders"></option>
+                        <option value="Apple iphone"></option>
+                        <option value="Ahmed Hassan"></option>
+                    </datalist>
+                </form> 
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                        class="material-icons md-apps"></i></button>
+                <ul class="nav">
+                    <li>
+                        <div class="" style="border-radius: 0px !important;">
+                            <form action="{% url 'selectlanguage'  %}" method="post"
+                                style="border-radius: 0px !important;">
+                                {% csrf_token %}
+                                <input type="hidden" name="text" value="{{ redirect_to }}">
+                    <li>
+                        <select class="" onchange="submit()"
+                            style="border-radius: 0px !important; padding: 7px 0;font-size: 13px; line-height: 1;"
+                            id="" name="language">
+                            {% get_current_language as LANGUAGE_CODE  %}
+                            {% get_available_languages as LANGUAGES  %}
+                            {% get_language_info_list for LANGUAGES as languages  %}
+
+                            {% for language in languages %}
+                            <option value="{{language.code}}" {% if language.code == LANGUAGE_CODE %}
+                                selected {% endif %}>{{language.name_local}} ({{language.code}}) </option>
+
+                            {% endfor %}
+
+                        </select>
+                        <noscript>
+                            <input type="submit" value="Set">
+                        </noscript>
+                    </li>
+                    </form>
+            </div>
+                    </li>
+
+            <li>
+                <div c style="border-radius: 0px !important;">
+                    <form action="{% url 'selectcurrency' %}" method="post" id="currency_switcher" style="border-radius: 0px !important;">
+                        {% csrf_token %}
+                        <select name="currency" onchange="document.getElementById('currency_switcher').submit()"
+                                style="border-radius: 0px !important; padding: 7px 0; font-size: 13px; line-height: 1;">
+                            {% for currency in CURRENCIES %}
+                                <option value="{{ currency.code }}"
+                                        {% if currency.code == request.session.currency %} selected='selected' {% endif %}>
+                                    {{ currency.symbol }} {{ currency.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <noscript>
+                            <input type="submit" value="Set">
+                        </noscript>
+                    </form>
+                    
+                    
+        </div>
+            </li>
+
+                    <div class="header-right">
+                      
+                        <div class="header-action-right">
+                            <div class="header-action-2">
+                                <div class="header-action-icon-2 nav-item">
+                                    <a> <img class="img-xs rounded-circle" src="{{profile.image.url}}"
+                                        alt="User" style="max-width: none; width: 40px;
+                                        height: 40px;"/></a>
+                                    <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                                        {% if user.is_authenticated %}
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'costumer-dashboard'  %}"><i
+                                                        class="fi fi-rs-user mr-10"></i>My Account</a>
+                                            </li>
+                                            <li>
+                                                <a href="page-account.html"><i
+                                                        class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
+                                            </li>
+                                            <li>
+                                                <a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My
+                                                    Voucher</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'wishlist'  %}"><i class="fi fi-rs-heart mr-10"></i>My
+                                                    Wishlist</a>
+                                            </li>
+                                            <li>
+                                                <a href="page-account.html"><i
+                                                        class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'sign-out'  %}"><i
+                                                        class="User fi fi-rs-sign-out mr-10"></i>Sign out</a>
+                                            </li>
+                                        </ul>
+                                        {% else  %}
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'sign-in'  %}"><i
+                                                        class="fi fi-rs-sign-in mr-10"></i>Sign in</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'sign-up'  %}"><i
+                                                        class="fi fi-rs-register mr-10"></i>Sign up</a>
+                                            </li>
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+
+            </div>
+        </header>
+        <script>
+            setTimeout(() => {
+                $('.alert').alert('close')
+            }, 3080)
+        </script>
+        {% block 'vendor' %}
+
+        {% endblock %}
+        <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear());
+                    </script>
+                    &copy; Nest - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">All rights reserved</div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="{% static 'assets/js/vendors/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendors/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendors/select2.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendors/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/js/vendors/jquery.fullscreen.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendors/chart.js' %}"></script>
+    <!-- Main Script -->
+    <script src="{% static 'assets/js/main2.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/js/custom-chart.js' %}" type="text/javascript"></script>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+    <script src="{% static 'assets/js/vendor/modernizr-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-3.6.0.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'assets/js/vendor/jquery-migrate-3.3.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/slick.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.syotimer.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/wow.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery-ui.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/magnific-popup.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/select2.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/waypoints.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/counterup.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.countdown.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/images-loaded.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/isotope.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/scrollup.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.vticker-min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.theia.sticky.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.elevatezoom.js' %}"></script>
+    <script src="{% static 'assets/tinymce/tinymce.min.js' %}"></script>
+    <!-- Template  JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/shop.js' %}"></script>
+    <script src="{% static 'assets/js/function.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+        integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=" crossorigin="anonymous"></script>
+</body>
+<script type="text/javascript">
+    //<![CDATA[
+
+    CKEDITOR.replace('myEditor', {
+        fullPage: false,
+        footer: false,
+    });
+    //]]>
+
+    function dupliquerElement() {
+        // Sélectionnez l'élément que vous souhaitez dupliquer
+        var elementA = document.getElementById("element-a");
+    
+        // Créez une copie de l'élément
+        var cloneElement = elementA.cloneNode(true);
+    
+        // Ajoutez la copie à un conteneur dans le DOM
+        var conteneurElements = document.getElementById("conteneur-elements");
+        conteneurElements.appendChild(cloneElement);
+    }
+    function uploadImage() {
+        // Cliquez sur le bouton de téléchargement de fichier caché
+        document.getElementById('imageUpload').click();
+    }
+    const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isSmallScreen = window.matchMedia('(max-width: 1023.5px)').matches;
+
+  tinymce.init({
+    selector: 'textarea.tinymce-editor',
+    plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+    editimage_cors_hosts: ['picsum.photos'],
+    menubar: 'file edit view insert format tools table help',
+    toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+    toolbar_sticky: false,
+    toolbar_sticky_offset: isSmallScreen ? 102 : 108,
+    autosave_ask_before_unload: true,
+    autosave_interval: '30s',
+    autosave_prefix: '{path}{query}-{id}-',
+    autosave_restore_when_empty: false,
+    autosave_retention: '2m',
+    image_advtab: true,
+    link_list: [{
+        title: 'My page 1',
+        value: 'https://www.tiny.cloud'
+      },
+      {
+        title: 'My page 2',
+        value: 'http://www.moxiecode.com'
+      }
+    ],
+    image_list: [{
+        title: 'My page 1',
+        value: 'https://www.tiny.cloud'
+      },
+      {
+        title: 'My page 2',
+        value: 'http://www.moxiecode.com'
+      }
+    ],
+    image_class_list: [{
+        title: 'None',
+        value: ''
+      },
+      {
+        title: 'Some class',
+        value: 'class-name'
+      }
+    ],
+    importcss_append: true,
+    file_picker_callback: (callback, value, meta) => {
+      /* Provide file and text for the link dialog */
+      if (meta.filetype === 'file') {
+        callback('https://www.google.com/logos/google.jpg', {
+          text: 'My text'
+        });
+      }
+
+      /* Provide image and alt text for the image dialog */
+      if (meta.filetype === 'image') {
+        callback('https://www.google.com/logos/google.jpg', {
+          alt: 'My alt text'
+        });
+      }
+
+      /* Provide alternative source and posted for the media dialog */
+      if (meta.filetype === 'media') {
+        callback('movie.mp4', {
+          source2: 'alt.ogg',
+          poster: 'https://www.google.com/logos/google.jpg'
+        });
+      }
+    },
+    templates: [{
+        title: 'New Table',
+        description: 'creates a new table',
+        content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>'
+      },
+      {
+        title: 'Starting my story',
+        description: 'A cure for writers block',
+        content: 'Once upon a time...'
+      },
+      {
+        title: 'New list with dates',
+        description: 'New List with dates',
+        content: '<div class="mceTmpl"><span class="cdate">cdate</span><br><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
+      }
+    ],
+    template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+    template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+    height: 400,
+    image_caption: true,
+    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+    noneditable_class: 'mceNonEditable',
+    toolbar_mode: 'sliding',
+    contextmenu: 'link image table',
+    skin: useDarkMode ? 'oxide-dark' : 'oxide',
+    content_css: useDarkMode ? 'dark' : 'default',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+  });
+    </script>
+
+</html>

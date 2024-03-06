@@ -1,0 +1,48 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: .\universal_store\urls.py:25
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-15 17:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\templates\core\about.html:13
+msgid "Home"
+msgstr ""
+
+#: .\templates\core\about.html:14
+msgid "Pages"
+msgstr ""
+
+#: .\templates\core\about.html:15
+msgid "About"
+msgstr ""
+
+#: .\templates\core\about.html:15
+msgid "us"
+msgstr ""
+
+#: .\templates\core\index.html:20
+msgid "Don’t miss amazing"
+msgstr ""
+
+#: .\universal_store\urls.py:23
+msgid "admin/"
+msgstr ""
+
+#: .\universal_store\urls.py:26
+msgid "user/"
+msgstr ""

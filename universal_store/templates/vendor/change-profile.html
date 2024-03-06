@@ -1,0 +1,129 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<section class="content-main">
+    <div class="content-header">
+        <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header" style="height: 70px"></div>
+        <div class="card-body">
+
+            <!-- card-body.// -->
+            <hr class="my-4" />
+            <div class="card-body">
+                <form  method="post"  action="{% url 'change-profile'%}" id="uploadForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-xl col-lg flex-grow-0" style="flex-basis: 230px ; border-radius: 100px;">
+
+                            <div class="img-thumbnail shadow w-100 bg-white position-relative text-center" style="height: 209px; width: 200px; margin-top: -120px ;border-radius: 100px;overflow: hidden;">
+                                    <img src="{{profile.image.url}}" class="center-xy img-fluid" style="border-radius: 100px;"  alt="Logo Brand" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-2 col-md-12">
+                            <label><span class="required"></span></label>
+                            <input required="" class="form-control" style="text-align: center;" disabled value="Profile du compte" name="dname" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>First Name <span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{profile.first_name}}" name="first_name" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Last Name <span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{profile.last_name}}" name="last_name" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>username <span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{profile.user.username}}" name="username" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>image<span class="required">*</span></label>
+                            <input type="file" name="image" class="form-control">
+                        </div>
+                        <div class="my-2 col-md-12">
+                            <!-- <label>Info<span class="required">*</span></label> -->
+                            <!-- <input required="" class="form-control"  name="email" type="email"> -->
+                            <textarea name="bio" cols="30" rows="10" class="form-control">{{profile.bio}}</textarea>
+                        </div>
+                        <div class="col-md-12 mt-20">
+                            <button class="btn" name="submit" value="Submit">Save change</button>
+                        </div>
+                    </div>
+
+                </form>
+                <form  method="post" action="{% url 'change-password'  %}">  
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="my-2 col-md-12">
+                            <label><span class="required"></span></label>
+                            <input required="" class="form-control" style="text-align: center;" disabled  value="change password" name="info" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Current Password <span class="required">*</span></label>
+                            <input required="" class="form-control" name="current_password" type="password">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <!-- <label>Current Password <span class="required">*</span></label> -->
+                             <input required="" class="form-control" name="password" type="hidden">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>New Password <span class="required">*</span></label>
+                            <input required="" class="form-control" name="new_password" type="password">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Confirm Password <span class="required">*</span></label>
+                            <input required="" class="form-control" name="confirm_password" type="password">
+                        </div>
+                        <div class="col-md-12 mt-20">
+                            <button class="btn" name="submit" value="Submit">Save change</button>
+                        </div>
+                    </div>
+                </form>
+                <form  method="post" action="#">  
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="my-2 col-md-12">
+                            <label><span class="required"></span></label>
+                            <input required="" class="form-control" style="text-align: center;" disabled  value="change e-mail" name="info" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{profile.user.email}}" name="email" type="email">
+                        </div>
+
+                        <div class="col-md-12 mt-20">
+                            <button class="btn" name="submit" value="Submit">Save change</button>
+                        </div>
+                    </div>
+                </form>
+                <form  method="post" action="#">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="my-2 col-md-12">
+                            <label><span class="required"></span></label>
+                            <input required="" class="form-control" style="text-align: center;" disabled  value="change phonenumber" name="info" type="text">
+                        </div>
+                        <div class="my-2 col-md-6">
+                            <label>Current Password <span class="required">*</span></label>
+                            <input required="" class="form-control" value="{{profile.user.phone}}" name="phone">
+                        </div>
+                        <div class="col-md-12 mt-20">
+                            <button class="btn" name="submit" value="Submit">Save change</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!--  row.// -->
+        </div>
+        <!--  card-body.// -->
+    </div>
+</section>
+
+{% endblock %}

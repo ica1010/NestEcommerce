@@ -1,0 +1,139 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<section class="content-main">
+   <form action="{% url 'add-service'  %}"  method="post"  enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add New Service</h2>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Basic information</h4>
+                </div>
+                <div class="card-body">
+                        <div class="mb-4">
+                            <label  class="form-label">Service title<span class="required">*</span></label>
+                            <input type="text" placeholder="" required name="product_title" class="form-control" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description<span class="required">*</span></label>
+                            <textarea placeholder="Type here" class="tinymce-editor form-control" required name="product_desc" rows="4"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full specification<span class="required">*</span></label>
+                            <textarea placeholder="Type here" class=" tinymce-editor form-control" required name="product_spec" rows="4"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Regular price</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="" type="text"  name="product_old_price" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Promotional price</label>
+                                    <input placeholder="" type="text" name="product_price" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Product devise</label>
+                                    <div class="row gx-2">
+                                        <input value="{{request.session.currency}}" class="form-control" style="background-color: white; border: 0px transparent;" disabled onclick="alert('vous ne pouver pas changer la devise ici ')" />                                
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Principal image<span class="required">*</span></h4>
+                </div>
+                <div class="card-body">
+                    <div class="input-upload">
+                        <input type="file" name="image" required class="form-control">
+                    </div>
+                </div>              
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Secondary images</h4>
+                </div>
+                <div class="card-body"  id="element-a">
+                    <div class="input-upload">
+                        <input type="file" name="images" class="form-control">
+                    </div>
+                </div>
+                <div id="conteneur-elements"></div>               
+            </div>
+        <center>
+            <a id="scrollUp" onclick="dupliquerElement()" class="btn btn-primary mb-5">Add an image</span></a>
+        </center>
+            <!-- card end// -->
+            <div class="card mb-4 mt-50">
+                <div class="card-header">
+                    <h4>References</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row gx-2">
+                        <div class="col-sm-12 mb-3">
+                            <label class="form-label">Category<span class="required">*</span></label>
+                            <div class="custom_select col-sm-12">
+                                <select class="form-select select-nice" name="category" required>
+                                    <option selected disabled>Service Category</option>
+                                    {% for category in categories %}
+                                    <option value="{{category.title}}" >{{category.title}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label  class="form-label">Tags</label>
+                            <input type="text" class="form-control" name='tag' placeholder="separate it by a comma" />
+                        </div>
+                        <div class="mb-4">
+                            <label  class="form-label">Type<span class="required">*</span></label>
+                            <input type="text" class="form-control" required name='type' />
+                        </div>
+                        <!-- <label for="">Product life</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <label  class="form-label">Created at</label>
+                                <input type="date" class="form-control px-2" name='from' />
+                            </div>
+                            <div class="col-6">
+                                <label  class="form-label">exprire at</label>
+                                <input type="date" class="form-control px-2" name='to' />
+                            </div>
+                        </div> -->
+                    </div>
+                    <!-- row.// -->
+                 
+                </div>
+
+            </div>
+            <!-- card end// -->
+            <div class="col-md-12">
+                <button type="submit" class="bt form-control p-0 sbmit" name="submit" value="Submit">Create Service</button>
+            </div>
+        </div>
+       
+    </div>
+   </form>
+</section>
+
+{% endblock %}

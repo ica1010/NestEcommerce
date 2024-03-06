@@ -1,0 +1,120 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<section class="content-main">
+    <div class="content-header">
+        <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                {% if address %}
+                {% for address in address %}
+                <div class="col-lg-6" style="max-width: max-content;">
+                    <div class="card mb-3 mb-lg-0">
+                        <div class="card-header">
+                        Billing Address {{forloop.counter}}
+                        </div>
+                        <div class="card-body">
+                            <address>Country : {{address.country}}</address>
+                            <address>Regions : {{address.region}}</address>
+                            <address>City : {{address.city}}</address>
+                            <address>Address line 1 : {{address.address_line_1}}</address>
+                            <address>Address line 2 : {{address.address_line_2}}</address>
+                            {% if address.mobile %}
+                            <address>Numero de telephone :{{address.mobile}}</address>
+                            {% endif %}
+                            <!-- {% if address.status %}
+                            <td>Status : <span style="color: green;" data-address-id="{{address.id}}" class="check{{address.id}} check" > Default </span> </td>
+                            <div class="row mt-10">
+                                <div class="col">
+                            <button data-address-id="{{address.id}}" style="display: none;" class="btn  make-default-address button{{address.id}} action_btn font-weight-old">Make default</button>
+                                </div>
+                            </div>
+                            
+                            {% else  %}
+                            <td>Status : <span style="color: green; " style="display: none;"   data-address-id="{{address.id}}" class="check{{address.id}} check" > approuved </span> </td>
+                            <div class="row mt-10">
+                                <div class="col">
+                            <button data-address-id="{{address.id}}"  class="btn make-default-address button{{address.id}} action_btn font-weight-old">Make default</button>
+                
+                                </div>
+                            </div>
+                            {% endif %} -->
+                            {% if address.status %}
+                            <td class="mt-10 text-end"><span data-address-id="{{address.id}}" class="  mt-30 fa fa-check-circle text-success check{{address.id}} check"><span>  Default </span></span></td>
+                            <td class="mt-10 text-end">
+                                <button data-address-id="{{address.id}}" style="display: none;" class=" mt-30 btn make-default-address  button{{address.id}} action_btn">Make Default</button>
+                            </td>
+                            {% else  %}
+                            <td class="mt-10 text-end">
+                            <span data-address-id="{{address.id}}" style="display: none;" class="  mt-30 fa fa-check-circle text-success check check{{address.id}}"> Default </span> 
+                            </td>
+                            <td class=" text-end">
+                            <button data-address-id="{{address.id}}"  class="btn make-default-address mt-30 button{{address.id}} action_btn">Make Default</button>
+                            </td>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div> 
+                {% endfor %}
+                {% else  %}
+                    <h1>any addres found</h1>
+                {% endif %}
+               
+                <div class="row">
+                    <hr class="mt-30">
+                    <div class="col-md-8">
+                        <div class="card p-0 mt-30">
+                            <div class="card-header">
+                                <h5 class="text-center">Add new address</h5>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="row">
+                        
+                            <div class="form-gvroup col-md-6">
+                                <label>Country<span class="required">*</span></label>
+                                <input required="" class="form-control" name="country" type="text">
+                            </div>
+                            <div class="form-gvroup col-md-6">
+                                <label>Regions<span class="required">*</span></label>
+                                <input required="" class="form-control" name="regions" type="text">
+                            </div>
+                            <div class="form-gvroup col-md-6">
+                                <label>City<span class="required">*</span></label>
+                                <input required="" class="form-control" name="city" type="text">
+                            </div>
+                            <div class="form-gvroup col-md-6">
+                                <label>Address line 1<span class="required">*</span></label>
+                                <input required="" class="form-control" name="address_line_1" type="text">
+                            </div>
+                            <div class="form-gvroup col-md-6">
+                                <label>Address line 2</label>
+                                <input class="form-control" name="address_line_2" type="text">
+                            </div>
+                            <div class="form-grouvp col-md-6">
+                                <label>Phone<span class="required">*</span></label>
+                                <input required="" class="form-control" name="mobile">
+                            </div>
+                            <div class="col-md-12 mt-20">
+                                <button class="btn" name="submit" value="Submit">Save</button>
+                            </div>
+                    
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+            <!--  row.// -->
+        </div>
+        <!--  card-body.// -->
+    </div>
+</section>
+
+{% endblock %}

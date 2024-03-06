@@ -1,0 +1,92 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<section class="content-main">
+    <div class="content-header">
+        <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">Your Orders</h3>
+        </div>
+        <div class="card-body">
+           {% if orders_list %}
+           <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">ID Order</th>
+                        <th style="text-align: center;">Date</th>
+                        <th style="text-align: center;">Billing Address</th>
+                        <th style="text-align: center;">Paid</th>
+                        <th style="text-align: center;">Total</th>
+                        <th style="text-align: center;">Track</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for order in orders_list %}
+                    <tr>
+                        <td style="text-align: center;">#Invoice-no-{{order.id}}</td>
+                        <td style="text-align: center;">{{order.order_date}}</td>
+                        <td style="text-align: center;">Au {{address.country}}, dans la regions {{address.region}} dans la ville de  {{address.city}} a {{address.address_line_1}} ;
+                        </td>
+                        {% if order.paid_status == False %}
+                        <td><!-- <i class="fi-rs-Xmark"></i> --><center> <span class="badge badge-pill badge-soft-danger">Unpaid</span></center></td>
+                        {% else  %}
+                        <td><center> <span class="badge badge-pill badge-soft-success">Paid</span></center></td>
+                        {% endif %}
+                        <td style="text-align: center;">{{order.price}}</td>
+                        <td><center><a href="{% url 'order-detail' order.id  %}" class="btn btn-xs">Order detail</a></center></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else  %}
+            <h2 style="text-align: center;margin: 80px 0px;">Any order yet</h2>
+           {% endif %}
+        </div>
+    </div>
+            
+            <script>
+                // Sample data for the bar chart
+                var data = {
+                  labels: {{ month|safe }},
+                  datasets: [{
+                    label: 'orders',
+                    data: {{ total_orders|safe }},
+                    backgroundColor: 'hsl(234.17deg 42.09% 25.49%)',
+                    borderColor: 'hsl(234.17deg 42.09% 25.49%)',
+                    borderWidth: 1
+                  }]
+                };
+            
+                // Chart configuration
+                var options = {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                };
+            
+                // Get the canvas element
+                var ctx = document.getElementById('myChart').getContext('2d');
+            
+                // Create the bar chart
+                var myChart = new Chart(ctx, {
+                  type: 'bar',
+                  data: data,
+                  options: options
+                });
+            </script>
+
+</section>
+
+{% endblock %}
+
+

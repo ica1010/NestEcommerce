@@ -1,0 +1,86 @@
+{% extends 'partials/vbase.html' %}
+{% load i18n %}
+{% load currency %}
+{% load static %}
+{% block 'vendor' %}
+<section class="content-main">
+    <div class="content-header">
+        <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header bg-brand-2 archive-header-3 archive-header mb-80"
+            style="height: 200px ; background-image: url({{vendor.cover_image.url}});"></div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xl col-lg flex-grow-0" style="flex-basis: 230px ; border-radius: 100px;">
+                    <div class="img-thumbnail shadow w-100 bg-white position-relative text-center"
+                        style="height: 150px !important; width: 150px !important; margin-top: -120px ;border-radius: 100px;overflow: hidden;bottom: 92px;">
+                        <img src="{{vendor.image.url}}" class="center-xy img-fluid" width="100%" alt="Logo Brand" />
+                    </div>
+                </div>
+                <!--  col.// -->
+                <div class="col-xl col-lg">
+                    <h3>{{vendor.title}}</h3>
+                    <p>Description</p>
+                    <h6>{{vendor.description |safe}}</h6>
+                </div>
+                <!--  col.// -->
+                <div class="col-xl-4 text-md-end" style="margin-top: 35px !important;">
+                    <center><a href="{% url 'shop-change-profile'  %}" class="btn btn-primary m-1"
+                            id="scrollUp">Change informations <i class="material-icons md-launch"></i> </a></center>
+                </div>
+
+                <!--  col.// -->
+            </div>
+            <!-- card-body.// -->
+            <hr class="my-4" />
+            <div class="row g-4">
+                <div class="col-md-12 col-lg-4 col-xl-2">
+                    <article class="box">
+                        <p class="mb-0 text-muted">Total sales:</p>
+                        <h5 class="text-success">238</h5>
+                        <p class="mb-0 text-muted">Revenue:</p>
+                        <h5 class="text-success mb-0">$2380</h5>
+                    </article>
+                </div>
+                <!--  col.// -->
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                    <h6>Contacts</h6>
+                    <p>
+                        Manager : {{vendor.user}}<br />
+                        E-mail : {{vendor.user.email}}<br />
+                        Phone Number : {{vendor.contact}}
+                    </p>
+                </div>
+                <!--  col.// -->
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                    <h6>Address: </h6><p>{{vendor.address}}</p>
+                    <!-- <p>
+                        Country: California <br />
+                        Address:{% for address in address %}
+                        Au {{address.country}}, dans la regions {{address.region}} dans la ville de {{address.city}} a
+                        {{address.address_line_1}} ;
+                        {% endfor %}
+                    </p> -->
+                </div>
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                    <h6>Social media</h6>
+                    <p>
+                        Manager : {{vendor.user}}<br />
+                        E-mail : {{vendor.user.email}}<br />
+                        Phone Number : {{vendor.user.phone}}
+                    </p>
+                </div>
+                <!--  col.// -->
+
+                <!--  col.// -->
+            </div>
+
+            <!--  row.// -->
+        </div>
+            </div>
+            <!-- row.// -->
+        </div>
+        <!-- card-body end// -->
+    </div>
+{% endblock %}
